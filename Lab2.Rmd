@@ -1,0 +1,48 @@
+---
+title: "Lab2"
+author: "Anna Matarazzo"
+date: "9/16/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Problems
+
+# Problem 1
+
+1. Use R to demonstrate that the mean minimizes the sum of the squared deviations from the mean. Accomplish the following steps:
+a. Produce a sample of at least 10 or more different numbers
+b. Produce a simulation following the example from the concepts section
+c. Use your simulation to test a range of numbers smaller and larger than the mean to show that the mean minimizes the sum of the squared deviations from the mean.
+d. Plot your results.
+
+```{r}
+
+scores <- c(4,78,6,8,1,9,7,13,5,3,2)
+mean(scores)
+scores-mean(scores)
+deviations_squared <-(scores-mean(scores))^2
+sum(deviations_squared)  
+
+min(scores)
+max(scores)
+numbers_to_test <- min(scores):max(scores)
+
+sum_deviations_squared <- c()
+for(i in numbers_to_test) {
+  sum_deviations_squared[i] <- sum((scores-i)^2)
+}
+
+sum_deviations_squared
+
+plot(sum_deviations_squared)
+
+```
+
+
+
+
