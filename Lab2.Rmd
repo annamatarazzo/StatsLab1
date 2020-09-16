@@ -10,9 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-## Problems
-
-# Problem 1
+## Problem 1
 
 1. Use R to demonstrate that the mean minimizes the sum of the squared deviations from the mean. Accomplish the following steps:
 a. Produce a sample of at least 10 or more different numbers
@@ -44,5 +42,144 @@ plot(sum_deviations_squared)
 ```
 
 
+` Confidence level: 60 with Google )`
 
+
+## Problem 2
+
+2. Write a custom R function for any one of the following descriptive statistics: median, mode, standard deviation, variance. Demonstrate that it produces the same value as the base R function given some set of numbers.
+
+```{r}
+my_variance <- function(x) {
+  sum_x <- sum(x)
+  length_x <- length(x)
+  sum_deviations_squared <- sum((x-mean(x))^2)
+  variance_x <- sum_deviations_squared/length_x
+  return(variance_x)
+}
+
+my_variance(1:10)
+```
+
+```{r}
+var(1:10)
+```
+
+```{r}
+my_variance <- function(x) {
+  sum_x <- sum(x)
+  length_x <- length(x)-1
+  sum_deviations_squared <- sum((x-mean(x))^2)
+  variance_x <- sum_deviations_squared/length_x
+  return(variance_x)
+}
+
+my_variance(1:10)
+```
+
+` Confidence level: 85 with Google))`
+
+
+## Problem 3
+
+3. Imagine the same instructor taught a morning, afternoon, and evening section of the same course. And, the average scores for each section on a midterm were 85% for the morning, 90% for the afternoon, and 93% for the evening sections. Create a data.frame representing these means for each section. Then, use ggplot2 to plot the means as bar graph. (hint you will need one vector for the class sections, and one vector for the means. Then you can combine them into a data.frame before plotting them)
+
+```{r}
+  means <- c(85, 90, 93)
+  course <- c("morning", "afternoon", "evening")
+  my_data <- data.frame(means, course)
+
+library(ggplot2)
+  
+  ggplot(my_data, aes(course,means))+
+  geom_bar(stat = "identity")+
+  ylab("Grades")+
+  xlab("Section")+
+  theme_classic()+
+  ggtitle("Average Scores For Each Section On a Midterm")
+  
+```
+
+` Confidence level: 40`
+
+
+## Problem 4
+
+4. Imagine there were two instructors, and they each taught different sections in the morning, afternoon and evening. The midterm averages for instructor 1 were 75%, 78%, and 80% in the morning, afternoon, and evening. The midterm averages for instructor 2 were 88%, 76%, and 63% for the morning, afternoon, and evening. Create a data.frame representing the means, the time of day, and the instructors (three columns). Then plot data.frame using ggplot2 as a bar graph.
+
+
+```{r}
+  instructor <- c("one", "one", "one", "two", "two", "two")
+  course <- c("morning", "afternoon", "evening","morning", "afternoon", "evening")
+  grades <- c(75, 78, 80, 88, 76, 63)
+  my_data <- data.frame(instructor, course, grades)
+  
+  ggplot(my_data, aes(course,grades, group=instructor, fill=instructor))+
+  geom_bar(stat = "identity", position = "dodge")+
+  ylab("Grades")+
+  xlab("Section")+
+  theme_classic()+
+  ggtitle("Average Scores For Each Section On a Midterm")
+  
+```
+
+
+` Confidence level: 20`
+
+## Problem 5
+5.Import the WHR2018.csv data file, containing measure from the World Happiness report from 2018. For the years 2010 to 2015, what was the mean “healthy life expectancy at birth” for each year (find the mean for each year across countries). Show your results in a table and in a graph using ggplot.
+```{r}
+
+whr <- read.table("open_data/WHR2018.csv",
+                             sep = ",",
+                             header = TRUE )
+
+library(dplyr)
+
+mean_hle <- whr %>%
+  filter(year >= 2010,
+         year <= 2015) %>%
+  group_by(year) %>%
+  summarize(mean_healthy = mean(Healthy.life.expectancy.at.birth, na.rm = TRUE))
+
+ggplot(mean_hle, aes(year,mean_healthy), color=year)+
+  geom_bar(stat="identity")+
+  ylab("Mean_HLE")+
+  xlab("Year")+
+  theme_classic()+
+  ggtitle("Healthy Life Expectancy At Birth")
+
+```
+
+
+` Confidence level: 10, why did the "color" or "fill" function not work in this case?`
+
+
+## Problem 6
+
+6.Repeat the above, except in addition to calculating the mean for each year, also calculate the standard deviation for “healthy life expectancy at birth” for each year. Then, add error bars to your graph using the +1 and -1 standard deviations from the means for each year.
+
+```{r}
+mean_hle <- whr %>%
+  filter(year >= 2010,
+         year <= 2015) %>%
+  group_by(year) %>%
+  summarize(mean_healthy = mean(Healthy.life.expectancy.at.birth, na.rm = TRUE),
+            sd_healthy = sd(Healthy.life.expectancy.at.birth, na.rm = TRUE))
+
+ggplot(mean_hle, aes(year,mean_healthy), color=year)+
+  geom_bar(stat="identity")+
+  geom_errorbar(aes(ymin = mean_healthy-sd_healthy,
+                    ymax = mean_healthy + sd_healthy),
+                width = .25)+
+  ylab("Mean_HLE")+
+  xlab("Year")+
+  theme_classic()+
+  ggtitle("Healthy Life Expectancy At Birth")
+
+```
+
+
+
+ `Confidence level: 5. Trying to figure out things on my own without your videos was a painful experience.`
 
