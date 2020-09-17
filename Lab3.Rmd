@@ -244,16 +244,94 @@ ggplot(means, aes(x=sample, y=sample_mean))+
 
 ```
 
+` Confidence level: 15 ` 
 
 
 
+##Problem 2
+2. Additionally calculate the standard deviation of each sample from above. Use the standard deviations for error bars, and produce another graph with the means along with error bars using ggplot2. (1 point)
+
+
+```{r}
+my_data <- data.frame(sample_data = rnorm(125,200,100),
+                      sample = rep(1:5, each=25))
+
+library(ggplot2)
+library(dbplyr)
+
+means <- my_data %>%
+  group_by(sample)%>%
+  summarise(sample_mean = mean(sample_data),
+            sample_sd = sd(sample_data))
+
+ggplot(means, aes(x=sample, y=sample_mean))+
+  geom_bar(stat="identity")+
+geom_errorbar(aes(ymin = sample_mean-sample_sd,
+                    ymax = sample_mean+sample_sd),
+                width = .25)+
+  ylab("Mean")+
+  xlab("Sample")+
+  theme_classic()+
+  ggtitle("Sample Means With Error Bars")
+
+```
+
+` Confidence level: 95 with the help of previous example and Lab2 ` 
 
 
 
+##Problem 3
+
+3. Demonstrate that the sample mean across a range of n, is an unbiased estimator of the population mean using a monte-carlo simulation. (2 points).
+- The population is a normal distribution with mean = 10, standard deviation = 5.
+- Test a variety of n (sample size), including n = 2, 5, 10, 50, and 100
+- For each sample size n, your task is to draw 10,000 samples of that size, then for each sample, calculate the sample mean. If the mean is unbiased, then we expect that “on average” the sample means will be the same as the population mean. To determine if this is true, compute the mean of the sample means that you produce to see if it is close to the population mean.
+- Show the mean of the sample means for each sample size.
+
+
+```{r}
+
+#initialize variables
+
+population <- rnorm(2*10000, mean=10, sd=5)
+samples <- rep(1:10000, each = 2)
+my_data <- data.frame(samples, population)
+
+
+sum_data <- my_data%>%
+  group_by(samples)%>%
+  summarize(sample_means = mean(population))
+
+mean(sum_data$sample_means)
 
 
 
+#run simulation
+for(i in 1:length(n)){
+  sim_sample <- rnorm(n[i], mean = 10, sd = 5)
+  sample_mean[i] <- mean(sim_sample)
+  sample_sd[i] <- sd(sim_sample)
+}
 
+# organize results in dataframe
+sim_data <- data.frame(n,
+                       sample_mean,
+                       sample_sd)
+
+# graph results
+ggplot(sim_data,aes(x=n,y=sample_mean))+
+  geom_point()+
+  geom_line()+
+  geom_hline(yintercept=100, color="red")
+
+ggplot(sim_data,aes(x=n,y=sample_sd))+
+  geom_point()+
+  geom_line()+
+  geom_hline(yintercept=50, color="red")
+
+
+
+```
 
 
 
