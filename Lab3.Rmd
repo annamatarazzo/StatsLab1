@@ -31,6 +31,234 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 
 
 
+```{r}
+sample(x=1:2, size = 2)
+
+```
+```{r}
+sample(x=1:2, size = 10, replace = TRUE)
+
+```
+
+```{r}
+sample(x=1:2, size = 10, replace = TRUE, prob = c(0.9, 0.1))
+
+```
+
+
+```{r}
+sample(x=c("heads", "tails"), size = 10, replace = TRUE, prob = c(0.9, 0.1))
+
+```
+
+```{r}
+sample(x=1:1000, size = 10, replace = FALSE)
+
+```
+
+
+```{r}
+rnorm(n= 10,mean = 0, sd = 1)
+rnorm(10,0,1)
+```
+
+
+
+```{r}
+my_sample = rnorm(1000,0,1)
+hist(my_sample)
+
+
+```
+
+```{r}
+my_data <- data.frame(sample_data = rnorm(100,0,1),
+                      sample = 1)
+
+library(ggplot2)
+
+ggplot(my_data, aes(x=sample_data))+
+  geom_histogram()
+
+
+```
+
+
+```{r}
+my_data <- data.frame(sample_data = rnorm(100,0,1),
+                      sample = rep(1:4, each=25))
+
+ggplot(my_data, aes(x=sample_data))+
+  geom_histogram()+
+  facet_wrap(~sample)
+
+```
+
+
+```{r}
+
+hist(runif(1000,0,1))
+
+
+```
+
+
+```{r}
+
+hist(runif(10000,100,1000))
+
+
+```
+
+```{r}
+
+my_sample <- runif(100,0,1)
+length(my_sample[my_sample < 0.05])
+
+
+```
+
+
+
+```{r}
+hist(rexp(1000,rate =2))
+
+
+```
+
+```{r}
+hist(rbinom(100,1,prob =.5))
+```
+
+```{r}
+hist(rweibull(1000,2,1))
+```
+
+```{r}
+library(moments)
+my_sample = rnorm(1000,0,1)
+mean(my_sample)
+sd(my_sample)
+skewness(my_sample)
+kurtosis(my_sample)
+hist(my_sample)
+
+```
+
+
+```{r}
+my_sample <- rexp(1000,2)
+mean(my_sample)
+sd(my_sample)
+skewness(my_sample)
+kurtosis(my_sample)
+hist(my_sample)
+```
+
+
+
+```{r}
+flip <- c()
+outcome <- c()
+proportion_heads <- c()
+proportion_tails <- c()
+
+for(i in 1:1000){
+  flip[i] <- i
+  outcome[i] <- sample(x= c(1,0), size = 1)
+  proportion_heads[i] = sum(outcome)/length(outcome)
+  proportion_tails[i] = 1-proportion_heads[i]
+}
+
+# create a dataframe with saved data
+sim_data <- data.frame(flip,
+                       outcome,
+                       proportion_heads,
+                       proportion_tails)
+
+# plot the simulation results
+ggplot(sim_data, aes(x=flip,y=proportion_heads))+
+  geom_point()+
+  geom_line()+
+  geom_hline(yintercept=.5, color="red")
+
+
+```
+
+
+```{r}
+
+#initialize variables
+n <- seq(1000,100000,1000)
+sample_mean <- c()
+sample_sd <- c()
+
+#run simulation
+for(i in 1:length(n)){
+  sim_sample <- rnorm(n[i], mean = 100, sd = 50)
+  sample_mean[i] <- mean(sim_sample)
+  sample_sd[i] <- sd(sim_sample)
+}
+
+# organize results in dataframe
+sim_data <- data.frame(n,
+                       sample_mean,
+                       sample_sd)
+
+# graph results
+ggplot(sim_data,aes(x=n,y=sample_mean))+
+  geom_point()+
+  geom_line()+
+  geom_hline(yintercept=100, color="red")
+
+ggplot(sim_data,aes(x=n,y=sample_sd))+
+  geom_point()+
+  geom_line()+
+  geom_hline(yintercept=50, color="red")
+
+
+
+```
+
+
+
+#Problems
+
+##Problem 1
+
+1. Create five samples of 25 observations from a normal distribution with mean 200, and standard deviation 100. Compute the mean of each sample, and plot the means in a graph using ggplot2. (1 point)
+
+```{r}
+my_data <- data.frame(sample_data = rnorm(125,200,100),
+                      sample = rep(1:5, each=25))
+
+library(ggplot2)
+library(dbplyr)
+
+means <- my_data %>%
+  group_by(sample)%>%
+  summarise(sample_mean = mean(sample_data))
+
+ggplot(means, aes(x=sample, y=sample_mean))+
+  geom_bar(stat="identity")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
