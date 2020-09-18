@@ -142,7 +142,7 @@ mean_hle <- whr %>%
   group_by(year) %>%
   summarize(mean_healthy = mean(Healthy.life.expectancy.at.birth, na.rm = TRUE))
 
-ggplot(mean_hle, aes(year,mean_healthy), color=year)+
+ggplot(mean_hle, aes(year,mean_healthy), color=mean_hle)+
   geom_bar(stat="identity")+
   ylab("Mean_HLE")+
   xlab("Year")+
