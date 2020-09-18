@@ -198,7 +198,7 @@ print(p)
 ```
 
 
-` Confidence level: 80. I almost did it on my own with Google!!!`
+` Confidence level: 80. I did it almost all on my own with Google and a previous example!!!`
 
 
 
