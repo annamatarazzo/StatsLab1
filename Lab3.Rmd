@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 ```
 
 ## R Markdown
@@ -291,10 +291,12 @@ geom_errorbar(aes(ymin = sample_mean-sample_sd,
 
 ```{r}
 
-#initialize variables
+sample_sizes <- c(2,5,10,50,100)
+sim_sample_means <- c()
 
-population <- rnorm(2*10000, mean=10, sd=5)
-samples <- rep(1:10000, each = 2)
+for (i in 1:length(sample_sizes)) {
+population <- rnorm(sample_sizes[i]*10000, mean=10, sd=5)
+samples <- rep(1:10000, each = n)
 my_data <- data.frame(samples, population)
 
 
@@ -302,38 +304,24 @@ sum_data <- my_data%>%
   group_by(samples)%>%
   summarize(sample_means = mean(population))
 
-mean(sum_data$sample_means)
+sim_sample_means[i] <- (mean(sum_data$sample_means))
 
-
-
-#run simulation
-for(i in 1:length(n)){
-  sim_sample <- rnorm(n[i], mean = 10, sd = 5)
-  sample_mean[i] <- mean(sim_sample)
-  sample_sd[i] <- sd(sim_sample)
 }
 
+
 # organize results in dataframe
-sim_data <- data.frame(n,
-                       sample_mean,
-                       sample_sd)
+sim_data <- data.frame(sample_sizes,
+                       sim_sample_means)
 
 # graph results
-ggplot(sim_data,aes(x=n,y=sample_mean))+
-  geom_point()+
-  geom_line()+
-  geom_hline(yintercept=100, color="red")
-
-ggplot(sim_data,aes(x=n,y=sample_sd))+
-  geom_point()+
-  geom_line()+
-  geom_hline(yintercept=50, color="red")
-
+ggplot(sim_data,aes(x=sample_sizes,y=sim_sample_means, group = 1))+
+  geom_line(colour = "green")+
+  geom_point(colour = "blue", size = 3)
 
 
 ```
 
-
+` Confidence level: about 10 ` 
 
 
 
