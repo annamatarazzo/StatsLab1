@@ -296,7 +296,7 @@ sim_sample_means <- c()
 
 for (i in 1:length(sample_sizes)) {
 population <- rnorm(sample_sizes[i]*10000, mean=10, sd=5)
-samples <- rep(1:10000, each = n)
+samples <- rep(1:10000, each = sample_sizes[i])
 my_data <- data.frame(samples, population)
 
 
@@ -316,12 +316,22 @@ sim_data <- data.frame(sample_sizes,
 # graph results
 ggplot(sim_data,aes(x=sample_sizes,y=sim_sample_means, group = 1))+
   geom_line(colour = "green")+
-  geom_point(colour = "blue", size = 3)
+  geom_point(colour = "blue", size = 3)+
+  coord_cartesian(ylim = c(9.75,10.25))+
+  ylab("Sample Means")+
+  xlab("Sample Sizes")+
+  theme_classic()+
+  ggtitle("Sample Means Across a Range of N")
 
 
 ```
 
-` Confidence level: about 10 ` 
+` Confidence level: about 10.`
+`I was on a right way, I made a loop, but I didn't know how to assign "n" in the loop to 2, 5, 10 etc. (i.e "sample_sizes[i]"). I originally just created a vector n <- c(2,5..) and in the loop I wrote "population <- rnorm(n*10000, mean=10, sd=5)", but of course it didn't work. Also I wrote "for i in n" instead of "i in 1:length(sample_sizes)"`
+
+
+
+
 
 
 
