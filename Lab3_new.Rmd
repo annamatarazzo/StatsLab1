@@ -1,7 +1,7 @@
 ---
-title: "Lab3"
+title: "Lab3_new"
 author: "Anna Matarazzo"
-date: "9/17/2020"
+date: "9/18/2020"
 output: html_document
 ---
 
@@ -176,4 +176,3 @@ geom_point()+
 ```
 
 
-` Confidence level: 35.`
