@@ -39,8 +39,7 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 
 sample_sizes <- c(2,5,10,50,100)
 sim_sample_sd <- c()
-sim_sample_sd_n_minus_1 <- c()
-sim_sample_means <- c()
+sim_sample_sd_n <- c()
 
 
 ##first
@@ -63,27 +62,32 @@ sim_data <- data.frame(sample_sizes,
 
 ##second 
 
+sd_n <- function(x){
+  sqrt(sum((mean(x)-x)^2)/length(x))
+}
+
 for (i in 1:length(sample_sizes)) {
 population <- rnorm(sample_sizes[i]*10000, mean=10, sd=5)
 samples <- rep(1:10000, each = sample_sizes[i])
 my_data <- data.frame(samples, population)
 
-
-
 sum_data <- my_data%>%
   group_by(samples)%>%
-  summarize(sample_means = mean(population))
+  summarize(sample_sd_n = sd_n(population))
 
-sim_sample_means[i] <- (mean(sum_data$sample_means))
-
+sim_sample_sd_n[i] <- (mean(sum_data$sample_sd_n))
 }
+ 
+sim_data2 <- data.frame(sample_sizes,
+                       sim_sample_sd)
+
 
 
 # graph 
 p = ggplot() +
 
   geom_line(data = sim_data, aes(x=sample_sizes,y=sim_sample_sd, group = 1, colour = "green"))+
-   geom_line(data = sum_data, aes(x=sample_sizes,y=sim_sample_means, group = 1, colour = "blue"))+
+   geom_line(data = sim_data2, aes(x=sample_sizes,y=sim_sample_sd_n, group = 1, colour = "blue"))+
  
   ylab("Sample SDs")+
   xlab("Sample Sizes")+
