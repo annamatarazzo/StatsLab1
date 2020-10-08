@@ -88,7 +88,7 @@ table(number_of_heads)/10000
 
 number_of_heads <- rbinom(10000, 10, prob = .5)
 table(number_of_heads)/10000
-````
+```
 
 
 
@@ -161,18 +161,31 @@ plot(my_belief)
 my_paragraph <- "In 1918 the Belarusian People's Republic (BNR) was proclaimed, the symbols of which became the coat of arms Pahonia and the white-red-white flag. On 11 August, the newspaper Svobodnaya Belarus published the first official description of the flag and coat of arms. In 1919-1920, the white-red-white flag was used by Belarusian military formations as part of the armies of Poland and Lithuania. In 1920, the flag was used by participants in the Slutsk uprising."
 
 wiki_letters <- unlist(strsplit(my_paragraph, split=""))
+lower_case <- tolower(wiki_letters)
+letter_counts <- table(lower_case)
+letter_counts <- as.data.frame(letter_counts)
 
+library (dplyr)
+
+final <- letter_counts %>%
+  filter(lower_case %in% letters == TRUE)
+
+final
 
 ```
 
 
-letter_counts <- table(lower_case)
-letter_counts <- as.data.frame(lower_case)
+` Confidence level: 01 ` 
 
-library (dplyr)
 
-letter_counts %>%
-  filter(lower_case %in% letters == TRUE)
+
+
+
+
+
+
+
+
 
 
 
