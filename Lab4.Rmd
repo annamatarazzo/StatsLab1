@@ -158,20 +158,21 @@ plot(my_belief)
 
 ```{r}
 
-my_paragraph <- "In 1918 the Belarusian People's Republic (BNR) was proclaimed, the symbols of which became the coat of arms Pahonia and the white-red-white flag. On 11 August, the newspaper Svobodnaya Belarus published the first official description of the flag and coat of arms. In 1919-1920, the white-red-white flag was used by Belarusian military formations as part of the armies of Poland and Lithuania. In 1920, the flag was used by participants in the Slutsk uprising"
+my_paragraph <- "In 1918 the Belarusian People's Republic (BNR) was proclaimed, the symbols of which became the coat of arms Pahonia and the white-red-white flag. On 11 August, the newspaper Svobodnaya Belarus published the first official description of the flag and coat of arms. In 1919-1920, the white-red-white flag was used by Belarusian military formations as part of the armies of Poland and Lithuania. In 1920, the flag was used by participants in the Slutsk uprising."
 
 wiki_letters <- unlist(strsplit(my_paragraph, split=""))
-lower_case <- tolower(wiki_letters)
-letter_counts <- table(lower_case)
-letter_counts <- data.frame(lower_case)
 
-
-library (dplyr)
 
 ```
 
 
+letter_counts <- table(lower_case)
+letter_counts <- as.data.frame(lower_case)
 
+library (dplyr)
+
+letter_counts %>%
+  filter(lower_case %in% letters == TRUE)
 
 
 
