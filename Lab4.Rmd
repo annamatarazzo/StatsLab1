@@ -1,0 +1,180 @@
+---
+title: "Lab4"
+author: "Anna Matarazzo"
+date: "10/7/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+
+rolls <- sample (1:6, 10000, replace = TRUE)
+table (rolls)
+
+
+```
+
+
+
+
+```{r}
+
+one <- sample (1:6, 1000, replace = TRUE)
+two <- sample (1:6, 1000, replace = TRUE)
+combined <- one+two
+table (combined)/1000
+
+```
+
+
+```{r}
+
+first <- rep (x = 1:6, each = 6)
+second <- rep (x = 1:6, times = 6)
+sum_rolls <- first+second
+table (sum_rolls)/length(sum_rolls)
+
+sim_result <- table(combined)/1000
+true_probs <- table(sum_rolls)/length(sum_rolls)
+
+true_probs-sim_result
+
+```
+
+```{r}
+sample(c("A","B"), 20, replace = TRUE, prob = c(.8, .2))
+
+letters
+
+LETTERS
+
+sample(letters, 50, replace = TRUE)
+
+```
+
+
+```{r}
+
+my_letters <- sample(letters,  50*2, replace = TRUE)
+my_strings <- matrix(my_letters, ncol=2)
+paste(my_strings[1,], collapse="")
+random_strings <- c()
+for (i in 1:dim(my_strings)[1]){
+  random_strings[i] <- paste(my_strings[i,], collapse="")
+}
+
+random_strings
+###
+###if (random_strings[i] = "ab") {
+ ### print("AB")
+#}
+
+````
+
+
+```{r}
+
+sim_results <- replicate(10000,
+                         sample ( c(1,0), 10, replace = TRUE))
+
+
+number_of_heads <- colSums(sim_results)
+table(number_of_heads)/10000
+
+number_of_heads <- rbinom(10000, 10, prob = .5)
+table(number_of_heads)/10000
+````
+
+
+
+```{r}
+flips <- sample( c("H","T"), 10000, replace = TRUE)
+
+ 
+
+````
+
+
+
+```{r}
+flips <- sample( c("H","T"), 10000, replace = TRUE)
+
+sequence <- c()
+for (i in 3:length(flips)){
+  first_element <- flips[i-2]
+  second_element <- flips[i-1]
+  third_element <- flips[i]
+  sequence[i-1] <- paste0(first_element, second_element, third_element)
+}
+
+table(sequence)/sum(table(sequence))
+
+```
+
+
+```{r}
+simulated_sequence <- c(rbinom(100,1,.5),
+                        rbinom(100, 1, .6))
+
+my_knowledge <- c()
+my_belief <- c()
+for(i in 1:length(simulated_sequence)){
+  my_knowledge[i] <- simulated_sequence[i]
+  my_belief[i] <- sum(my_knowledge)/length(my_knowledge)
+}
+
+plot(my_belief)
+```
+
+
+```{r}
+simulated_sequence <- c(rbinom(100,1,.5),
+                        rbinom(100, 1, .6))
+
+my_knowledge <- c()
+my_belief <- c()
+for(i in 1:length(simulated_sequence)){
+  my_knowledge[i] <- simulated_sequence[i]
+  if(i <= 20){
+    my_belief[i] <- sum(my_knowledge)/length(my_knowledge)
+  } else{
+    my_belief[i] <- sum(my_knowledge[i:(i-20)])/length(my_knowledge[i:(i-20)])
+}
+}
+
+plot(my_belief)
+````
+
+
+## Problems
+
+1. Estimate the letter occurrence probabilities of all 26 letters in English by measuring a paragraph of English text from wikipedia. (hint use strsplit() to split a paragraph into individual letters) (1 point).
+
+
+```{r}
+
+my_paragraph <- "In 1918 the Belarusian People's Republic (BNR) was proclaimed, the symbols of which became the coat of arms Pahonia and the white-red-white flag. On 11 August, the newspaper Svobodnaya Belarus published the first official description of the flag and coat of arms. In 1919-1920, the white-red-white flag was used by Belarusian military formations as part of the armies of Poland and Lithuania. In 1920, the flag was used by participants in the Slutsk uprising"
+
+wiki_letters <- unlist(strsplit(my_paragraph, split=""))
+lower_case <- tolower(wiki_letters)
+letter_counts <- table(lower_case)
+letter_counts <- data.frame(lower_case)
+
+
+library (dplyr)
+
+```
+
+
+
+
+
+
+
+
+

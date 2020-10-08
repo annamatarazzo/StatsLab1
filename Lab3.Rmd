@@ -176,15 +176,15 @@ sim_sample_sd_n[i] <- (mean(sum_data$sample_sd_n))
 }
  
 sim_data2 <- data.frame(sample_sizes,
-                       sim_sample_sd)
+                       sim_sample_sd_n)
 
 
 
 # graph 
 p = ggplot() +
 
-  geom_line(data = sim_data, aes(x=sample_sizes,y=sim_sample_sd, group = 1, colour = "green"))+
-   geom_line(data = sim_data2, aes(x=sample_sizes,y=sim_sample_sd_n, group = 1, colour = "blue"))+
+  geom_line(data = sim_data, aes(x=sample_sizes,y=sim_sample_sd, color = "green"))+
+   geom_line(data = sim_data2, aes(x=sample_sizes,y=sim_sample_sd_n, color = "blue"))+
  
   ylab("Sample SDs")+
   xlab("Sample Sizes")+
