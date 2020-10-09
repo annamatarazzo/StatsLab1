@@ -151,7 +151,9 @@ plot(my_belief)
 ````
 
 
-## Problems
+# Problems
+
+## Problem 1
 
 1. Estimate the letter occurrence probabilities of all 26 letters in English by measuring a paragraph of English text from wikipedia. (hint use strsplit() to split a paragraph into individual letters) (1 point).
 
@@ -170,7 +172,12 @@ library (dplyr)
 final <- letter_counts %>%
   filter(lower_case %in% letters == TRUE)
 
-final
+total_letters <- sum(final$Freq)
+
+final <- final %>%
+  mutate(probabilities = Freq/total_letters)
+
+knitr::kable(final)
 
 ```
 
@@ -179,10 +186,18 @@ final
 
 
 
+## Problem 2
+
+2. Generate “random” strings of letters that are sampled from a distribution where letter occurrence probability is the same as natural English. Use the probabilities for each letter from this wikipedia article, or use your own estimates from the previous question (2 points).
+
+
+```{r}
+
+test_sample <- sample(x = final$lower_case, size= 5, replace = TRUE, prob = final$probabilities)
 
 
 
-
+```
 
 
 
