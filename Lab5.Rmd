@@ -158,10 +158,7 @@ length(selection)/1000000
 ```{r}
 
 some_data <- data.frame(observations = rnorm(n=10000, mean = 100, sd = 10),
-                        type = "A")
-
-region_data <- some_data %>%
-  filter(some_data$observations > 130)
+                        type = "Scores")
 
 some_data$observations[some_data$observations > 130]
 
@@ -186,10 +183,75 @@ length(some_observations[some_observations >130])/10000
 
 ## Problem 3
 
+3. You randomly sample 25 numbers from a normal distribution with mean = 10 and standard deviation = 20. You obtain a sample mean of 12. You want to know the probability that you could have received a sample mean of 12 or larger.
+
+Create a sampling distribution of the mean for this scenario with at least 10,000 sample means (1 point). Then, calculate the proportion of sample means that are 12 or larger (1 point).
 
 
+# My Verson:
+
+```{r}
+sample <- rnorm(25, 10, 20)
+
+sample_means <- replicate(10000, mean(rnorm(25,10,20)))
+hist(sample_means)
+
+mean_12 <- sample_means[sample_means >= 12]
+probability_12 <- length(mean_12)/10000
+probability_12
+```
 
 
+` Confidence level: 85 `
+
+
+# Key Verson:
+
+```{r}
+sampling_distribution <- replicate(10000, mean(rnorm(25, mean = 10, sd = 20)))
+hist(sampling_distribution)
+
+length(sampling_distribution[sampling_distribution >=12])/10000
+
+```
+
+## Problem 4
+
+4. You randomly sample 100 numbers from a normal distribution with mean = 10 and standard deviation = 20. You obtain a sample mean of 12. You want to know the probability that you could have received a sample mean of 12 or larger.
+Create a sampling distribution of the mean for this scenario with at least 10,000 sample means. Then, calculate the proportion of sample means that are 12 or larger. Is the proportion different from question 3, why? (1 point).
+
+```{r}
+
+sampling_distribution <- replicate(10000, mean(rnorm(100, mean = 10, sd = 20)))
+hist(sampling_distribution)
+
+probability <- length(sampling_distribution[sampling_distribution >=12])/10000
+
+probability
+
+```
+
+' I suppose the proportion is different because with increased N more sample means are closer to the actual population mean and therefore less sample means will be further away from the mean '
+' Confidence level - 98 '
+
+
+## Problem 5
+
+5. You randomly sample 25 numbers from a normal distribution with mean = 10 and standard deviation = 20. You obtain a sample standard deviation of 15. You want to know the probability that you could have received a sample standard deviation of 15 or less.
+Create a sampling distribution of standard deviations for this scenario with at least 10,000 sample standard deviations. Then, calculate the proportion of sample standard deviations that are 15 or less. (1 point)
+
+```{r}
+sample <- replicate(10000,
+                    sd(rnorm(25, 10, 20)))
+hist(sample)
+
+sd_15_or_less <- length(sample[sample <= 15])/10000
+sd_15_or_less
+
+```
+
+
+' Confidence level - 100 '
 
 
 
