@@ -247,14 +247,14 @@ Optional:
 
 - include the ability to calculate the probability of obtaining any mean difference or larger
 - deal with negative difference scores appropriately
-- 
-add one or two-tailed test options
+- add one or two-tailed test options
+
 
 ```{r}
 group_one <- c(3,4,5,6,7)
 group_two <- c(5,3,2,4,6)
   
-randomization_test <- function(A, B, resamples = 100) {
+randomization_test <- function(A, B, resamples = 1000) {
   
   group_A_mean <- mean(A)
   group_B_mean <- mean(B)
@@ -277,19 +277,22 @@ randomization_test <- function(A, B, resamples = 100) {
   ggplot2::theme_classic()
 
   p_value <- length(possible_differences[possible_differences >= mean_difference ] )/resamples
+  
+  st_dev = sd(possible_differences)
 
  
  test_output <- list(A_mean = group_A_mean,
                      B_mean = group_B_mean,
                      difference = mean_difference,
                      randomization = possible_differences,
+                     standard_deviation = st_dev,
                      plot = the_plot,
                      p_value = p_value)
  
  return(test_output)
 }
 
-randomization_test(A = group_one, B = group_two, resamples = 100)
+randomization_test(A = group_one, B = group_two, resamples = 1000)
 
 ```
 
@@ -311,11 +314,16 @@ group_1 <- the_data %>%
 
 group_1 <-group_1$Intellect_Rating
   
-randomization_test(A=group_0, 
-                   B=group_1, 
+randomization_test(A=group_1, 
+                   B=group_0, 
                    resamples = 1000) 
 
 ```
+
+#### The simulation shows us that the actual mean difference is unlikely to be due to chance because it is very close to the distribution tail(s). If the observed mean difference in the experiment was found to be .5 it would be close to the mean (looks like it's within 0.6-0.7 standard deviations from the mean), so this result would be very likely to be due to chance.
+
+
+
 
 
 
