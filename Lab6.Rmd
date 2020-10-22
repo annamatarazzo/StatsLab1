@@ -268,6 +268,7 @@ randomization_test <- function(A, B, resamples = 1000) {
   new_A_mean <- mean(resample[1:length(A)])
   new_B_mean <- mean(resample[(length(A)+1):length(all_means)])
   possible_differences[i] <- new_A_mean - new_B_mean
+  
 
 }
  
@@ -276,9 +277,12 @@ randomization_test <- function(A, B, resamples = 1000) {
   ggplot2::geom_vline(xintercept=mean_difference, color = "red")+
   ggplot2::theme_classic()
 
+ 
+# absolute_differences <- abs(possible_differences)
+ 
   p_value <- length(possible_differences[possible_differences >= mean_difference ] )/resamples
   
-  st_dev = sd(possible_differences)
+  st_dev <- sd(possible_differences)
 
  
  test_output <- list(A_mean = group_A_mean,
@@ -292,7 +296,9 @@ randomization_test <- function(A, B, resamples = 1000) {
  return(test_output)
 }
 
-randomization_test(A = group_one, B = group_two, resamples = 1000)
+randomization_test(A = group_one, 
+                   B = group_two, 
+                   resamples = 1000)
 
 ```
 
@@ -324,6 +330,50 @@ randomization_test(A=group_1,
 
 
 
+
+
+#####
+
+
+
+
+
+######Below I tried to find out what is the probability of getting Jenny's number if we randomly sample numbers from 0 to 9, and if we randomly sample only numbers 8675309. I kept it here because I want to finish working on it so that it presents a nice output.
+
+```{r}
+a <- sample(x = 0:9, size = 7, replace = FALSE)
+samples <- replicate(100000, sample(a))
+
+count_example <- 0
+for(i in 1:100000){
+  if(sum (samples[,i] == c(8,6,7,5,3,0,9)) == 7) {
+    count_example <-  count_example+1
+  }
+}
+
+count_example
+count_example/100000 
+
+```
+
+```{r}
+n=100000
+samples <- replicate(n, sample(c(0,3,5,6,7,8,9)))
+
+count_example <- 0
+for(i in 1:n){
+  if(sum (samples[,i] == c(8,6,7,5,3,0,9)) == 7) {
+    count_example <-  count_example+1
+  }
+}
+
+count_example
+count_example/n*100
+
+#output <- list (number_of_jennys_numbers = count_example,
+                # probability_percent = b)
+
+```
 
 
 
