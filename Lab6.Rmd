@@ -165,6 +165,68 @@ the_data %>%
   group_by(CONDITION) %>%
   summarize(group_means = mean(Intellect_Rating))
 
+simulation_data <- the_data %>%
+  select(CONDITION, Intellect_Rating)
+
+simulation_data %>%
+  mutate(Intellect_Rating = sample(Intellect_Rating))
+
+new_data <- simulation_data %>%
+   mutate(Intellect_Rating = sample(Intellect_Rating)) %>%
+  group_by(CONDITION) %>%
+  summarize(new_means = mean(Intellect_Rating), .groups="drop")
+
+new_data
+new_data[new_data$CONDITION == 0,]$new_means
+new_data[new_data$CONDITION == 1,]$new_means
+new_difference <- new_data[new_data$CONDITION == 1,]$new_means-new_data[new_data$CONDITION == 0,]$new_means
+
+possible_differences <- c()
+for(i in 1:1000){
+  new_data <- simulation_data %>%
+   mutate(Intellect_Rating = sample(Intellect_Rating)) %>%
+  group_by(CONDITION) %>%
+  summarize(new_means = mean(Intellect_Rating), .groups="drop")
+
+possible_differences[i] <- new_data[new_data$CONDITION == 1,]$new_means-new_data[new_data$CONDITION == 0,]$new_means
+}
+
+
+qplot(possible_differences)+
+  geom_histogram(color="orange")+
+  geom_vline(xintercept=2, color = "red")+
+  theme_classic()
+
+length(possible_differences[possible_differences >= 2])/length(possible_differences)
+
+```
+
+```{r}
+the_data <- read.csv("open_data/SchroederEpley2015data.csv", header = TRUE)
+
+the_data %>%
+  group_by(CONDITION) %>%
+  summarize(group_means = mean(Intellect_Rating))
+
+table(the_data$CONDITION)
+
+mean_differences <- c()
+for(i in 1:10000){
+  resample <- sample(the_data$Intellect_Rating)
+  new_1_mean <- mean(resample[1:18])
+  new_0_mean <- mean(resample[10:39])
+  mean_differences[i] <- new_1_mean - new_0_mean
+
+}
+
+
+qplot(mean_differences)+
+  geom_histogram(color="orange")+
+  geom_vline(xintercept=2, color = "red")+
+  theme_classic()
+
+
+
 ```
 
 
