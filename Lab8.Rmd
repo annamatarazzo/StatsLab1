@@ -1,0 +1,177 @@
+---
+title: "Lab8"
+author: "Anna Matarazzo"
+date: "10/22/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+
+x <- 1
+u <- 0   #mean
+sigma <- 1   #stdev
+
+1/(sigma*sqrt(2*pi))* exp(1)^(-.5*((x-u)/sigma)^2)
+
+dnorm(1,0,1)
+
+first_one <- dnorm(seq(-4,4,length.out=100),0,1)
+second_one <- dnorm(seq(5,45,length.out=100),25,5)
+
+plot_df <- data.frame(score=c(first_one,second_one),
+                      x = c(seq(-4,4,length.out=100),seq(5,45,length.out=100)),
+                      zscore = c(seq(-4,4,length.out=100),(seq(5,45,length.out=100)-25)/5),
+                      dist = rep(c("first","second"),each=100))
+
+library(ggplot2)
+
+ggplot(plot_df, aes(y=score,x=x))+
+  geom_line()+
+  facet_wrap(~dist)
+
+ggplot(plot_df, aes(y=score,x=x))+
+  geom_line()+
+  facet_wrap(~dist, scales="free_x")
+
+
+```
+
+
+```{r}
+
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+ggplot(plot_df, aes(y=score,x=x))+
+  geom_line()+
+  facet_wrap(~dist, scales="free_x")+
+  geom_ribbon(data = plot_df %>%filter(zscore >= 1,
+                                       zscore <= 2),
+              fill = "red",
+              aes(ymin=0,ymax=score))
+
+
+```
+
+
+```{r}
+
+library(dplyr)
+
+plot_df %>%
+  filter(dist == "first",
+         x>1,
+         x <= 2) %>%
+  select(score) %>%
+  sum()/sum(first_one)
+
+plot_df %>%
+  filter(dist == "second",
+         x > 30,
+         x <= 35) %>%
+  select(score) %>%
+  sum()/sum(second_one)
+
+```
+
+
+```{r}
+pnorm(2,0,1) - pnorm(1,0,1)
+
+pnorm(35,25,5)- pnorm(30,25,5)
+
+pnorm(1,0,1,lower.tail=FALSE)
+pnorm(2,0,1,lower.tail=FALSE)
+
+
+```
+
+
+
+LINEAR TRANSFORMATION SKIPPED HERE
+
+
+
+```{r}
+
+raw_scores <- runif(10000, min=0,1)
+hist(raw_scores)
+
+
+sample_means <- replicate(10000, mean(runif(5,0,100)))
+hist(sample_means)
+
+
+mean(sample_means) 
+sd(sample_means)
+
+pnorm(1,0,1) - pnorm(0,0,1)
+
+
+to_z <- (sample_means-mean(sample_means))/sd(sample_means)
+length(to_z[to_z > 0 & to_z < 1])/10000
+
+```
+
+```{r}
+pnorm(5,1,3,lower.tail = FALSE) #one-tailed
+
+pnorm((5-1)/3,0,1,lower.tail = FALSE)   #z-scores
+
+pnorm(5,1,3,lower.tail = FALSE)*2   #2-tailed
+
+```
+
+```{r}
+sample_means <- replicate(10000,mean(rnorm(10,55,5)))
+hist(sample_means)
+
+mean(sample_means)
+sd(sample_means)
+
+
+5/sqrt(10)
+
+```
+
+
+```{r}
+
+pnorm(60, 55, 5/sqrt(10), lower.tail=FALSE)
+
+zscore <- (60-55)/(5/sqrt(10))
+pnorm(zscore,0,1, lower.tail = FALSE)
+
+length(sample_means[sample_means > 60])/10000
+
+```
+
+
+```{r}
+mean_differences <- replicate(10000,mean(rnorm(10,55,5))-mean(rnorm(10,55,5)))
+hist(mean_differences)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
