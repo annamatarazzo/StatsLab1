@@ -157,16 +157,19 @@ qplot(mean_differences)+
 
 
 ```{r}
+the_data <- read.csv("open_data/SchroederEpley2015data.csv", header = TRUE)
 
+library(dplyr)
 
+the_data %>%
+  group_by(CONDITION) %>%
+  summarize(group_means = mean(Intellect_Rating))
 
 ```
 
 
 
 ## Problem 1
-
-#### Problem 1
 
 1. Write a function that conducts a randomization test for the mean difference between two groups, and show that it works. Specifically, using your function, conduct a randomization test on the same data we used in the above example from lab. Report the results and briefly discuss what the results of the randomization tell you. (6 points). Extra: if the observed mean difference in the experiment was found to be .5, what would you have concluded from the randomization test?
 Inputs:
