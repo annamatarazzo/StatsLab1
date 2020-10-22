@@ -1,13 +1,16 @@
 ---
-title: "Lab6"
+title: "Lab6_v1"
 author: "Anna Matarazzo"
-date: "10/11/2020"
+date: "10/22/2020"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+---
+
+
 
 
 ## Problem 1
@@ -87,7 +90,7 @@ randomization_test(A = group_one,
 ```{r}
 the_data <- read.csv("open_data/SchroederEpley2015data.csv", header = TRUE)
 
-library(dplyr)
+library(dbplyr)
 
 group_0 <- the_data %>%
   filter(CONDITION == 0)%>%
