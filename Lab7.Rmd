@@ -1,0 +1,195 @@
+---
+title: "Lab7"
+author: "Anna Matarazzo"
+date: "10/23/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+binom.test(x=65, n=100, p=0.5, alternative = "greater")
+```
+
+
+
+```{r}
+test_results <- binom.test(x=65, n=100, p=0.5, alternative = "greater")
+
+test_results$p.value
+
+```
+
+Pigeon A was `r test_results$statistic`% correct (p<=`r test_results$p.value`).
+
+
+
+```{r}
+
+library(ggplot2)
+qplot(y=dbinom(0:100, 100, .5))+
+  geom_bar(stat='identity', position="dodge")+
+  ylab('density')+
+  xlab('#of successes')
+
+sum(dbinom(0:100, 100, .5))
+
+sum(dbinom(65:100, 100, .5))
+
+
+
+```
+
+
+
+```{r}
+binom.test(x=7, n=10, alternative = "greater")
+
+```
+
+
+```{r}
+coin_flips <- data.frame (number_of_heads = 0:10,
+                          probability = dbinom(x=0:10, size=10, prob=.5),
+                          cumulative=pbinom(0:10, size=10,prob=.5),
+                          rev_cumulative = pbinom(-1:9,10,.5, lower.tail = FALSE))
+
+knitr::kable(coin_flips)
+
+```
+
+
+```{r}
+task_designs <- data.frame (number_of_heads = 0:1,
+                          probability = dbinom(x=0:1, size=1, prob=.5),
+                          cumulative=pbinom(0:1, size=1,prob=.5),
+                          rev_cumulative = pbinom(-1:0,1,.5, lower.tail = FALSE))
+
+knitr::kable(task_designs)
+
+```
+
+
+```{r}
+task_designs <- data.frame (number_of_heads = 0:2,
+                          probability = dbinom(x=0:2, size=2, prob=.5),
+                          cumulative=pbinom(0:2, size=2,prob=.5),
+                          rev_cumulative = pbinom(-1:1,1,.5, lower.tail = FALSE))
+
+knitr::kable(task_designs)
+
+```
+
+```{r}
+task_designs <- data.frame (number_of_heads = 0:2,
+                          probability = dbinom(x=0:2, size=2, prob=.5),
+                          cumulative=pbinom(0:2, size=2,prob=.5),
+                          rev_cumulative = pbinom(-1:1,1,.5, lower.tail = FALSE))
+
+knitr::kable(task_designs)
+
+```
+
+```{r}
+task_designs <- data.frame (number_of_heads = 0:3,
+                          probability = dbinom(x=0:3, size=3, prob=.5),
+                          cumulative=pbinom(0:3, size=3,prob=.5),
+                          rev_cumulative = pbinom(-1:2,3,.5, lower.tail = FALSE))
+
+knitr::kable(task_designs)
+
+```
+
+```{r}
+binom.test(x=51, n=100, .5, alternative = "greater")
+
+```
+
+```{r}
+binom.test(x=5100, n=10000, .5, alternative = "greater")
+
+```
+
+
+## Problem 1
+
+1. A test-taker answered 50 true/false questions and received a score of 60% correct. Report the results of a binomial test and explain whether you think the test-score could be produced by the test-taker randomly guessing on each question. (2 points)
+
+
+```{r}
+binom.test(x=50*0.6, n=50, .5, alternative = "greater")
+
+
+library(ggplot2)
+qplot(y=dbinom(0:50, 50, .5))+
+  geom_bar(stat='identity', position="dodge")+
+  ylab('density')+
+  xlab('#of successes')
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
