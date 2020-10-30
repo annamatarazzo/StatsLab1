@@ -121,8 +121,14 @@ binom.test(x=5100, n=10000, .5, alternative = "greater")
 
 
 ```{r}
-binom.test(x=50*0.6, n=50, .5, alternative = "greater")
 
+binom_test1 <- binom.test(x=50*0.6, n=50, .5, alternative = "greater")
+
+binom_test1 
+
+
+p_value <- format(round(binom_test1$p.value, 4), nsmall = 2)
+p_value_percent <- format(round(binom_test1$p.value*100, 2), nsmall = 2)
 
 library(ggplot2)
 qplot(y=dbinom(0:50, 50, .5))+
@@ -130,10 +136,11 @@ qplot(y=dbinom(0:50, 50, .5))+
   ylab('density')+
   xlab('#of successes')
 
-
-
-
 ```
+
+A test-taker answered `r binom_test1$statistic` questions correctly with a p value <=`r p_value`. Which means there is a `r p_value_percent`% chance that she would get the same result if she guessed the answers. This result is not statistically significant if we take the commonly accepted level of significance of p=0.05, which means that the result was unlikely to happen due to chance. Still I would not bet my collection of old payphone cards on that she didn't guess the answers because `r p_value` is still a good chance.
+
+
 
 
 
