@@ -131,7 +131,9 @@ p_value <- format(round(binom_test1$p.value, 4), nsmall = 2)
 p_value_percent <- format(round(binom_test1$p.value*100, 2), nsmall = 2)
 
 library(ggplot2)
+library(dplyr)
 qplot(y=dbinom(0:50, 50, .5))+
+  #mutate(colors = y >= 12)+
   geom_bar(stat='identity', position="dodge")+
   ylab('density')+
   xlab('#of successes')
@@ -142,6 +144,24 @@ A test-taker answered `r binom_test1$statistic` questions correctly with a p val
 
 
 
+```{r}
+# adding color to a critical region
+
+library(ggplot2)
+library(dplyr)
+
+sample_means <- replicate(10000, mean(rnorm(25,10,20)))
+
+plot_df <- data.frame(sample = 1:10000,
+                      means = sample_means) %>%
+  mutate(colors = means >= 12)
+
+ggplot(plot_df, aes(x=means))+
+  geom_histogram(binwidth=.5, aes(color=colors))+
+  geom_vline(xintercept=12, color="red")+
+  theme_classic()
+
+```
 
 
 
