@@ -126,21 +126,14 @@ binom_test1 <- binom.test(x=50*0.6, n=50, .5, alternative = "greater")
 
 binom_test1 
 
-
 p_value <- format(round(binom_test1$p.value, 4), nsmall = 2)
 p_value_percent <- format(round(binom_test1$p.value*100, 2), nsmall = 2)
-
-library(ggplot2)
-library(dplyr)
-qplot(y=dbinom(0:50, 50, .5))+
-  #mutate(colors = y >= 12)+
-  geom_bar(stat='identity', position="dodge")+
-  ylab('density')+
-  xlab('#of successes')
 
 ```
 
 A test-taker answered `r binom_test1$statistic` questions correctly with a p value <=`r p_value`. Which means there is a `r p_value_percent`% chance that she would get the same result if she guessed the answers. This result is not statistically significant if we take the commonly accepted level of significance of p=0.05, which means that the result was unlikely to happen due to chance. Still I would not bet my collection of old payphone cards on that she didn't guess the answers because `r p_value` is still a good chance.
+
+` Confidence level - 99 `
 
 
 
@@ -165,21 +158,75 @@ ggplot(plot_df, aes(x=means))+
 
 
 
+```{r}
+# define coordinate vectors for vertices of the polygon
+x <- c(2, seq(2, 10, 0.01), 10)
+y <- c(0, df(seq(2, 10, 0.01), 3, 14), 0)
+
+# draw density of F_{3, 14}
+curve(df(x ,3 ,14), 
+      ylim = c(0, 0.8), 
+      xlim = c(0, 10), 
+      ylab = "Density",
+      main = "Density Function")
+
+# draw the polygon
+polygon(x, y, col = "orange")
+
+```
+
+
+## Problem 2
+
+An examiner wants to make a TRUE/FALSE test, but is still deciding how many questions they will include. They want to make sure that it would be very difficult to simply randomly guess and be able to score any higher than 55% percent. How many questions would the examiner need to use to be confident that scores of 55% or higher were not produced by chance? (2 points)
+
+
+```{r}
+
+n <- c(seq(350, 450, 5)) # number of questions
+x <- c()  # 55 percent from n
+for(i in 1:length(n)){
+  x[i] <- 0.55*n[i]
+  as.integer(x[i])
+  }
+p <- 0.5 #probability of guessing correctly 
+
+successes <- as.integer(x)
+
+binom.test.p.values <- NULL
+for (i in 1:length(n)){
+ binom.test.p.values <- append(binom.test.p.values, binom.test(successes[i], n[i], p)$p.value)
+}
+
+dat <- data.frame (n, 
+                   x,
+                   binom.test.p.values)
+dat
+
+
+ggplot(dat, aes(binom.test.p.values, 
+                n,
+               group = 1))+
+  geom_point()+
+  geom_line(col=ifelse(binom.test.p.values<=0.05, "black", "red"))
+
+
+```
 
 
 
+a <- sample(x = 0:9, size = 7, replace = FALSE)
+samples <- replicate(100000, sample(a))
 
+count_example <- 0
+for(i in 1:100000){
+  if(sum (samples[,i] == c(8,6,7,5,3,0,9)) == 7) {
+    count_example <-  count_example+1
+  }
+}
 
-
-
-
-
-
-
-
-
-
-
+count_example
+count_example/100000 
 
 
 

@@ -87,30 +87,6 @@ randomization_test(A = group_one,
 ```
 
 
-```{r}
-the_data <- read.csv("open_data/SchroederEpley2015data.csv", header = TRUE)
-
-library(dbplyr)
-
-group_0 <- the_data %>%
-  filter(CONDITION == 0)%>%
-  select(Intellect_Rating)
-
-group_0 <-group_0$Intellect_Rating
-  
-group_1 <- the_data %>%
-  filter(CONDITION == 1)%>%
-  select(Intellect_Rating)
-
-group_1 <-group_1$Intellect_Rating
-  
-randomization_test(A=group_1, 
-                   B=group_0, 
-                   resamples = 1000) 
-
-```
-
-#### The simulation shows us that the actual mean difference is unlikely to be due to chance because it is very close to the distribution tail(s). If the observed mean difference in the experiment was found to be .5 it would be close to the mean (looks like it's within 0.6-0.7 standard deviations from the mean), so this result would be very likely to be due to chance.
 
 
 
@@ -122,7 +98,7 @@ randomization_test(A=group_1,
 
 
 
-######Below I tried to find out what is the probability of getting Jenny's number if we randomly sample numbers from 0 to 9, and if we randomly sample only numbers 8675309. I kept it here because I want to finish working on it so that it presents a nice output.
+###### Below I tried to find out what is the probability of getting Jenny's number if we randomly sample numbers from 0 to 9, and if we randomly sample only numbers 8675309. I kept it here because I want to finish working on it so that it presents a nice output.
 
 ```{r}
 a <- sample(x = 0:9, size = 7, replace = FALSE)
@@ -158,6 +134,23 @@ count_example/n*100
                 # probability_percent = b)
 
 ```
+
+
+```{r}
+
+factorial(36)
+
+
+
+
+
+
+```
+
+
+
+
+
 
 
 
