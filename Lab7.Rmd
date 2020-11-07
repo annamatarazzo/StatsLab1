@@ -10,111 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-
-```{r}
-binom.test(x=65, n=100, p=0.5, alternative = "greater")
-```
-
-
-
-```{r}
-test_results <- binom.test(x=65, n=100, p=0.5, alternative = "greater")
-
-test_results$p.value
-
-```
-
-Pigeon A was `r test_results$statistic`% correct (p<=`r test_results$p.value`).
-
-
-
-```{r}
-
-library(ggplot2)
-qplot(y=dbinom(0:100, 100, .5))+
-  geom_bar(stat='identity', position="dodge")+
-  ylab('density')+
-  xlab('#of successes')
-
-sum(dbinom(0:100, 100, .5))
-
-sum(dbinom(65:100, 100, .5))
-
-
-
-```
-
-
-
-```{r}
-binom.test(x=7, n=10, alternative = "greater")
-
-```
-
-
-```{r}
-coin_flips <- data.frame (number_of_heads = 0:10,
-                          probability = dbinom(x=0:10, size=10, prob=.5),
-                          cumulative=pbinom(0:10, size=10,prob=.5),
-                          rev_cumulative = pbinom(-1:9,10,.5, lower.tail = FALSE))
-
-knitr::kable(coin_flips)
-
-```
-
-
-```{r}
-task_designs <- data.frame (number_of_heads = 0:1,
-                          probability = dbinom(x=0:1, size=1, prob=.5),
-                          cumulative=pbinom(0:1, size=1,prob=.5),
-                          rev_cumulative = pbinom(-1:0,1,.5, lower.tail = FALSE))
-
-knitr::kable(task_designs)
-
-```
-
-
-```{r}
-task_designs <- data.frame (number_of_heads = 0:2,
-                          probability = dbinom(x=0:2, size=2, prob=.5),
-                          cumulative=pbinom(0:2, size=2,prob=.5),
-                          rev_cumulative = pbinom(-1:1,1,.5, lower.tail = FALSE))
-
-knitr::kable(task_designs)
-
-```
-
-```{r}
-task_designs <- data.frame (number_of_heads = 0:2,
-                          probability = dbinom(x=0:2, size=2, prob=.5),
-                          cumulative=pbinom(0:2, size=2,prob=.5),
-                          rev_cumulative = pbinom(-1:1,1,.5, lower.tail = FALSE))
-
-knitr::kable(task_designs)
-
-```
-
-```{r}
-task_designs <- data.frame (number_of_heads = 0:3,
-                          probability = dbinom(x=0:3, size=3, prob=.5),
-                          cumulative=pbinom(0:3, size=3,prob=.5),
-                          rev_cumulative = pbinom(-1:2,3,.5, lower.tail = FALSE))
-
-knitr::kable(task_designs)
-
-```
-
-```{r}
-binom.test(x=51, n=100, .5, alternative = "greater")
-
-```
-
-```{r}
-binom.test(x=5100, n=10000, .5, alternative = "greater")
-
-```
-
-
 ## Problem 1
 
 1. A test-taker answered 50 true/false questions and received a score of 60% correct. Report the results of a binomial test and explain whether you think the test-score could be produced by the test-taker randomly guessing on each question. (2 points)
@@ -137,53 +32,15 @@ A test-taker answered `r binom_test1$statistic` questions correctly with a p val
 
 
 
-```{r}
-# adding color to a critical region
-
-library(ggplot2)
-library(dplyr)
-
-sample_means <- replicate(10000, mean(rnorm(25,10,20)))
-
-plot_df <- data.frame(sample = 1:10000,
-                      means = sample_means) %>%
-  mutate(colors = means >= 12)
-
-ggplot(plot_df, aes(x=means))+
-  geom_histogram(binwidth=.5, aes(color=colors))+
-  geom_vline(xintercept=12, color="red")+
-  theme_classic()
-
-```
-
-
-
-```{r}
-# define coordinate vectors for vertices of the polygon
-x <- c(2, seq(2, 10, 0.01), 10)
-y <- c(0, df(seq(2, 10, 0.01), 3, 14), 0)
-
-# draw density of F_{3, 14}
-curve(df(x ,3 ,14), 
-      ylim = c(0, 0.8), 
-      xlim = c(0, 10), 
-      ylab = "Density",
-      main = "Density Function")
-
-# draw the polygon
-polygon(x, y, col = "orange")
-
-```
-
-
 ## Problem 2
 
 An examiner wants to make a TRUE/FALSE test, but is still deciding how many questions they will include. They want to make sure that it would be very difficult to simply randomly guess and be able to score any higher than 55% percent. How many questions would the examiner need to use to be confident that scores of 55% or higher were not produced by chance? (2 points)
 
+# My Verson:
 
 ```{r}
 
-n <- c(seq(350, 450, 5)) # number of questions
+n <- c(seq(350, 550, 5)) # number of questions
 x <- c()  # 55 percent from n
 for(i in 1:length(n)){
   x[i] <- 0.55*n[i]
@@ -201,32 +58,69 @@ for (i in 1:length(n)){
 dat <- data.frame (n, 
                    x,
                    binom.test.p.values)
-dat
+knitr::kable(dat, col.names= c("Number of questions",
+                              "Successes (55%)",
+                              "Binom.test.p.values"))
 
-
-ggplot(dat, aes(binom.test.p.values, 
-                n,
+library(ggplot2)
+ggplot(dat, aes(n,
+              binom.test.p.values,
                group = 1))+
-  geom_point()+
-  geom_line(col=ifelse(binom.test.p.values<=0.05, "black", "red"))
+  geom_point(col=ifelse(binom.test.p.values<0.05, "purple", "black"))+
+  geom_line(col=ifelse(binom.test.p.values<0.05, "purple", "black"))+
+  geom_hline(yintercept=0.05, color="red")
 
 
 ```
 
 
+` Confidence level - 99. I wonder if I did everything correctly. I was surprised to see that the p.values of binom.test sorta jump up and down, they do not constantly go down as a function of a number of questions. E.g.if there are 415 or 420 questions, p.value is less than 0.05, but at 425 questions it is more than 0.05. Does it have somthing to with x stored as integer?'`
 
-a <- sample(x = 0:9, size = 7, replace = FALSE)
-samples <- replicate(100000, sample(a))
 
-count_example <- 0
-for(i in 1:100000){
-  if(sum (samples[,i] == c(8,6,7,5,3,0,9)) == 7) {
-    count_example <-  count_example+1
-  }
-}
+# Key Verson:
 
-count_example
-count_example/100000 
+```{r}
+
+binom.test(x=220,
+           n=400,
+           alternative = "greater")
+
+```
+
+`  Why is binom.test in my version one-tailed and this one is two-tailed? ` 
+
+
+
+
+
+## Problem 3
+
+3. A test has 5 TRUE/FALSE questions (each with one right answer) and 5 multiple choice questions with four choices each (each with only one right answer).
+
+- create a sampling distribution or probability distribution to illustrate how a random chance process could perform on this test. (1 point)
+- What is the probability that randomly guessing on each question could allow a person to receive 75% or greater on this test? (1 point)
+
+```{r}
+
+rbinom(n=rep(1,10), size = 1, prob=c(.5,.5,.5,.5,.5,.25,.25,.25,.25,.25))
+
+simulated_test <- replicate(10000, rbinom(n=rep(1,10), size = 1, prob=c(.5,.5,.5,.5,.5,.25,.25,.25,.25,.25)))
+
+simulated_scores <- colSums(simulated_test)/10
+
+library(ggplot2)
+
+qplot(simulated_scores)+
+  geom_histogram()
+
+length(simulated_scores[simulated_scores>.75])/10000
+
+```
+
+
+` Confidence level - 90. I didn't do it on my own first, cause I spent too much time on the previous problem and I need to cath up on my labs, but I am pretty sure I could have done it by myself `
+
+
 
 
 
