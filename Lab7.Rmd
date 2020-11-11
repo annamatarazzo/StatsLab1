@@ -87,7 +87,7 @@ binom.test(x=220,
 
 ```
 
-`  Why is binom.test in my version one-tailed and this one is two-tailed? ` 
+`  Why is binom.test in my version two-tailed and this one is one-tailed? ` 
 
 
 
