@@ -98,8 +98,40 @@ pnorm(2,0,1,lower.tail=FALSE)
 ```
 
 
+```{r}
 
-LINEAR TRANSFORMATION SKIPPED HERE
+celsius <- seq(-50, 50, 1)
+fahrenheit <- seq(-50,50,1)*(9/5)+32
+
+plot_df <- data.frame(celsius, fahrenheit)
+
+ggplot(plot_df, aes(x=celsius, y=fahrenheit))+
+  geom_line()+
+  scale_y_continuous(breaks = seq(-60,140,10))+
+  scale_x_continuous(breaks = seq(-50,50,10))
+
+
+
+```
+
+```{r}
+pdf <- dnorm(seq(-4,4,length.out = 100),0,1)
+zscores <- seq(-4,4,length.out = 100)
+raw <- zscores*10+100
+plot_df <- data.frame(pdf,
+                      zscores,
+                      raw)
+
+ggplot(plot_df, aes(x=zscores, y=pdf))+
+  geom_line()+
+  scale_x_continuous(breaks = c(-4:4),
+                     sec.axis = sec_axis(~.*5+25, name = "RawScores", breaks=seq(5,50,5)))
+
+
+knitr::include_graphics("imgs/norm_zscores.png")
+
+
+```
 
 
 
@@ -141,7 +173,7 @@ mean(sample_means)
 sd(sample_means)
 
 
-5/sqrt(10)
+5/sqrt(10)  #SEM
 
 ```
 
@@ -166,6 +198,72 @@ hist(mean_differences)
 
 
 
+
+
+## Problem 1
+
+1. Write a function to convert a vector of raw-scores into z-scores. The function should have inputs for the vector, the mean and sd of the normal distribution, and should return a vector of zscores. (1 point). Also, demonstrate that the function works correctly (1 point). How you make the demonstration is up to you.
+
+- Advanced: Have an option so that the function will convert the raw scores to z-scores in one of two ways:
+- using user provided mean and standard deviation
+- using the calculated mean and standard deviation from the raw scores
+
+
+```{r}
+
+to_zscores <- function(raw, mu, sd){
+  zscores <- (raw-mu)/sd
+  return(zscores)
+}
+
+some_numbers <- c(1,2,3,4,5)
+
+to_zscores(some_numbers, 5, 1)
+
+
+
+to_zscores_b <- function(raw, mu=NULL, sdev=NULL){
+  if(is.null(mu) == TRUE) mu <- mean(raw)
+  if(is.null(sdev) == TRUE) sdev <- sd(raw)
+  zscores <- (raw - mu)/sdev
+  return(zscores)
+}
+
+to_zscores_b(some_numbers, 5, 1) 
+
+```
+
+
+Check 
+
+
+## Problem 2
+
+
+2. Base R does not have a function for a z-test. Write a function to accomplish a one-sample z-test. Remember, a one-sample z test is used to compare the probability of obtaining the sample mean (or larger or smaller) if it came from a known normal distribution. (2 points).
+
+- Use your z-test function to conduct a test of the following. A sample of 25 scores is taken. The mean of the sample is 50. The sample is assumed to have been taken from a normal distribution with mean 40 and standard deviation 7. Report a one-tailed z-test, examining the probability of obtaining a sample of greater than 50 in this situation. Report the results, and give a brief sentence explaining the result and the inference you make (2 points).
+
+```{r}
+z.test <- function(sample_mean, 
+                   sample_size, 
+                   mu, 
+                   sigma, 
+                   two.tailed=TRUE){
+    
+  sampl_dist_mean <- mu
+  sampl_dist_sd <- sigma/sqrt(sample_size)
+  
+  abs_difference <- abs(sample_mean - mu)
+  
+  p_value <- pnorm((mu+abs_difference), sampl_dist_mean, sampl_dist_sd, lower.tail = FALSE)
+  if(two.tailed == TRUE) p_value <- p_value*2
+  p_value
+ 
+}
+
+z.test(37, 5, 40, 7, two.tailed = FALSE)
+```
 
 
 
