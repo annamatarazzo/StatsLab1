@@ -10,204 +10,16 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r}
-
-x <- 1
-u <- 0   #mean
-sigma <- 1   #stdev
-
-1/(sigma*sqrt(2*pi))* exp(1)^(-.5*((x-u)/sigma)^2)
-
-dnorm(1,0,1)
-
-first_one <- dnorm(seq(-4,4,length.out=100),0,1)
-second_one <- dnorm(seq(5,45,length.out=100),25,5)
-
-plot_df <- data.frame(score=c(first_one,second_one),
-                      x = c(seq(-4,4,length.out=100),seq(5,45,length.out=100)),
-                      zscore = c(seq(-4,4,length.out=100),(seq(5,45,length.out=100)-25)/5),
-                      dist = rep(c("first","second"),each=100))
-
-library(ggplot2)
-
-ggplot(plot_df, aes(y=score,x=x))+
-  geom_line()+
-  facet_wrap(~dist)
-
-ggplot(plot_df, aes(y=score,x=x))+
-  geom_line()+
-  facet_wrap(~dist, scales="free_x")
-
-
-```
-
-
-```{r}
-
-library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
-ggplot(plot_df, aes(y=score,x=x))+
-  geom_line()+
-  facet_wrap(~dist, scales="free_x")+
-  geom_ribbon(data = plot_df %>%filter(zscore >= 1,
-                                       zscore <= 2),
-              fill = "red",
-              aes(ymin=0,ymax=score))
-
-
-```
-
-
-```{r}
-
-library(dplyr)
-
-plot_df %>%
-  filter(dist == "first",
-         x>1,
-         x <= 2) %>%
-  select(score) %>%
-  sum()/sum(first_one)
-
-plot_df %>%
-  filter(dist == "second",
-         x > 30,
-         x <= 35) %>%
-  select(score) %>%
-  sum()/sum(second_one)
-
-```
-
-
-```{r}
-pnorm(2,0,1) - pnorm(1,0,1)
-
-pnorm(35,25,5)- pnorm(30,25,5)
-
-pnorm(1,0,1,lower.tail=FALSE)
-pnorm(2,0,1,lower.tail=FALSE)
-
-
-```
-
-
-```{r}
-
-celsius <- seq(-50, 50, 1)
-fahrenheit <- seq(-50,50,1)*(9/5)+32
-
-plot_df <- data.frame(celsius, fahrenheit)
-
-ggplot(plot_df, aes(x=celsius, y=fahrenheit))+
-  geom_line()+
-  scale_y_continuous(breaks = seq(-60,140,10))+
-  scale_x_continuous(breaks = seq(-50,50,10))
-
-
-
-```
-
-```{r}
-pdf <- dnorm(seq(-4,4,length.out = 100),0,1)
-zscores <- seq(-4,4,length.out = 100)
-raw <- zscores*10+100
-plot_df <- data.frame(pdf,
-                      zscores,
-                      raw)
-
-ggplot(plot_df, aes(x=zscores, y=pdf))+
-  geom_line()+
-  scale_x_continuous(breaks = c(-4:4),
-                     sec.axis = sec_axis(~.*5+25, name = "RawScores", breaks=seq(5,50,5)))
-
-
-knitr::include_graphics("imgs/norm_zscores.png")
-
-
-```
-
-
-
-```{r}
-
-raw_scores <- runif(10000, min=0,1)
-hist(raw_scores)
-
-
-sample_means <- replicate(10000, mean(runif(5,0,100)))
-hist(sample_means)
-
-
-mean(sample_means) 
-sd(sample_means)
-
-pnorm(1,0,1) - pnorm(0,0,1)
-
-
-to_z <- (sample_means-mean(sample_means))/sd(sample_means)
-length(to_z[to_z > 0 & to_z < 1])/10000
-
-```
-
-```{r}
-pnorm(5,1,3,lower.tail = FALSE) #one-tailed
-
-pnorm((5-1)/3,0,1,lower.tail = FALSE)   #z-scores
-
-pnorm(5,1,3,lower.tail = FALSE)*2   #2-tailed
-
-```
-
-```{r}
-sample_means <- replicate(10000,mean(rnorm(10,55,5)))
-hist(sample_means)
-
-mean(sample_means)
-sd(sample_means)
-
-
-5/sqrt(10)  #SEM
-
-```
-
-
-```{r}
-
-pnorm(60, 55, 5/sqrt(10), lower.tail=FALSE)
-
-zscore <- (60-55)/(5/sqrt(10))
-pnorm(zscore,0,1, lower.tail = FALSE)
-
-length(sample_means[sample_means > 60])/10000
-
-```
-
-
-```{r}
-mean_differences <- replicate(10000,mean(rnorm(10,55,5))-mean(rnorm(10,55,5)))
-hist(mean_differences)
-
-```
-
-
-
-
 
 ## Problem 1
 
-1. Write a function to convert a vector of raw-scores into z-scores. The function should have inputs for the vector, the mean and sd of the normal distribution, and should return a vector of zscores. (1 point). Also, demonstrate that the function works correctly (1 point). How you make the demonstration is up to you.
+1. Write a function to convert a vector of raw-scores into z-scores. The function should have inputs for the vector, the mean and sd of the normal distribution, and should return a vector of z-scores. (1 point). Also, demonstrate that the function works correctly (1 point). How you make the demonstration is up to you.
 
 - Advanced: Have an option so that the function will convert the raw scores to z-scores in one of two ways:
 - using user provided mean and standard deviation
 - using the calculated mean and standard deviation from the raw scores
 
+## Key version
 
 ```{r}
 
@@ -231,10 +43,73 @@ to_zscores_b <- function(raw, mu=NULL, sdev=NULL){
 
 to_zscores_b(some_numbers, 5, 1) 
 
+
 ```
 
 
-Check 
+
+## My version
+
+I didn't figure out the way to solve the problem before I looked at the key video, so I decided to create a function that will  transform your height to z-scores and show you how far away in standard deviations is your height comparing to USA average.
+
+I encountered several problems:
+
+1. I was not able to code a gender in words instead of numbers (i.e. so that the user could write "to_zscores(176, female)");
+2. I was not able to include the graph inside the function (i.e. the user just types "to_zscores(176, female)" in a console and gets the answer and a graph without the need to run the code itself? Is it possible?)
+
+
+```{r}
+# Enter height in cm and gender (1 - male, 2 - female)
+
+height <- 176
+gender <- 2
+
+to_zscores <- function(height, gender){
+  if ((gender) == 1) 
+     zscores <- (height-178)/8
+  if ((gender) == 2) 
+     zscores <- (height-164)/6.35
+  return(zscores)
+}
+
+your_zscore <- to_zscores(height, gender)
+sd <- if (gender == 1) sd <- 8
+      if (gender == 2) sd <- 6.4
+mu <- if (gender == 1) mu <- 178
+      if (gender == 2) mu <- 164
+name <- if (gender == 1) name <- c("Height in cm, male")
+        if (gender == 2) name <- c("Height in cm, female")
+
+data.frame(your_zscore,
+           gender,
+           sd,
+           mu,
+           name)
+
+pdf <- dnorm(seq(-4,4,length.out=100),0,1)
+zscores <- seq(-4,4,length.out=100)
+plot_df <- data.frame(pdf,
+                      zscores,
+                      your_zscore)
+
+library(dplyr)
+library(ggplot2)
+
+ggplot(plot_df,aes(x=zscores,y=pdf))+
+  geom_line()+
+  geom_vline(xintercept = your_zscore,
+             color = "red")+
+  scale_x_continuous(breaks=c(-4:4),
+  sec.axis = sec_axis(~ .*sd+mu, name = name, breaks=seq(145,215,10)))
+  
+
+
+```
+
+` Confidence level - 90. ` 
+
+
+
 
 
 ## Problem 2
@@ -268,8 +143,7 @@ z.test(37, 5, 40, 7, two.tailed = FALSE)
 
 
 
-
-
+` Confidence level - 60. ` 
 
 
 
