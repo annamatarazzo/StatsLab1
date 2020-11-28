@@ -1,0 +1,361 @@
+---
+title: "Lab9"
+author: "Anna Matarazzo"
+date: "11/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+
+my_vals <- c(20,30, 10, 10, 30, 30)
+(xsq <- chisq.test(my_vals))
+
+xsq$statistic
+xsq$observed
+xsq$expected
+xsq$residuals
+
+b <- c((xsq$observed-xsq$expected)/sqrt(xsq$expected))
+b
+
+z <- c(((xsq$observed - xsq$expected)^2) / xsq$expected)
+z
+
+sum(((xsq$observed - xsq$expected)^2) / xsq$expected)
+
+```
+
+
+```{r}
+
+M <- as.table(rbind(c(762,327,468), c(484,239,477)))
+dimnames(M) <- list(gender = c("F","M"),
+                    party = c("Democrat", "Independent", "Republican"))
+(Xsq <- chisq.test(M))
+Xsq$observed
+Xsq$expected
+Xsq$residuals
+Xsq$stdres
+
+```
+
+
+
+```{r}
+coin_toss <- data.frame(outcome = c("H", "T"),
+                        O = c(23,27),
+                        E = c(25,25))
+knitr::kable(coin_toss)
+
+library(dplyr)
+
+coin_toss <- coin_toss %>%
+  mutate(d = O-E) %>%
+  mutate(d_sq = d^2) %>%
+  mutate(div = d_sq/E)
+
+knitr::kable(coin_toss)
+
+sum(coin_toss$div)
+
+   O <- c(23,27)
+   E <- c(25,25)
+   sum((O-E)^2/E)
+   
+chisq.test(x=c(23,27))
+   
+
+```
+
+
+```{r}
+
+my_vals <- c(47, 3)
+chisq.test(my_vals)
+
+```
+
+```{r}
+
+hist(rnorm(10000, 0, 1), breaks = 100)
+
+```
+
+
+```{r}
+
+hist(rnorm(10000, 0, 1)^2, breaks = 100)
+
+```
+
+```{r}
+
+hist(rchisq(10000, 1), breaks = 100)
+
+```
+
+
+
+```{r}
+
+# k=1
+from_normal <- replicate(10000, rnorm(1,0,1)^2)
+from_chisq <- rchisq(10000,1)
+plot_df <- data.frame(values = c(from_normal,
+                                 from_chisq),
+                      source = c("normal^2", "chisq"))
+
+library(ggplot2)
+ggplot(plot_df, aes(x=values))+
+  geom_histogram(bins=100)+
+  ggtitle("k=1")+
+  facet_wrap(~source)
+
+```
+
+
+
+```{r}
+
+# k=2
+from_normal <- replicate(10000, sum(rnorm(2,0,1)^2))
+from_chisq <- rchisq(10000,2)
+plot_df <- data.frame(values = c(from_normal,
+                                 from_chisq),
+                      source = c("normal^2", "chisq"))
+
+library(ggplot2)
+ggplot(plot_df, aes(x=values))+
+  geom_histogram(bins=100)+
+  ggtitle("k=1")+
+  facet_wrap(~source)
+
+```
+
+```{r}
+
+# k=3
+from_normal <- replicate(10000, sum(rnorm(3,0,1)^2))
+from_chisq <- rchisq(10000,3)
+plot_df <- data.frame(values = c(from_normal,
+                                 from_chisq),
+                      source = c("normal^2", "chisq"))
+
+library(ggplot2)
+ggplot(plot_df, aes(x=values))+
+  geom_histogram(bins=100)+
+  ggtitle("k=1")+
+  facet_wrap(~source)
+
+```
+
+
+```{r}
+
+# k=5
+from_normal <- replicate(10000, sum(rnorm(5,0,1)^2))
+from_chisq <- rchisq(10000,5)
+plot_df <- data.frame(values = c(from_normal,
+                                 from_chisq),
+                      source = c("normal^2", "chisq"))
+
+library(ggplot2)
+ggplot(plot_df, aes(x=values))+
+  geom_histogram(bins=100)+
+  ggtitle("k=1")+
+  facet_wrap(~source)
+
+```
+
+
+```{r}
+
+plot_df <- data.frame(values = c(dchisq(x=seq(0,20,length.out = 100), df=1),
+                                 dchisq(x=seq(0,20,length.out = 100), df=3),
+                                 dchisq(x=seq(0,20,length.out = 100), df=5),
+                                 dchisq(x=seq(0,20,length.out = 100), df=9),
+                                 dchisq(x=seq(0,20,length.out = 100), df=11)
+                                 ),
+                      x = rep(seq(0,20,length.out = 100),5),
+                      k = as.factor(rep(c(1,3,5,9,11), each = 100))
+)
+
+ggplot(plot_df, aes(x=x, y=values, color=k, group=k))+
+  geom_line()+
+  ylab("density")+
+  xlab("chi-squared")+
+  scale_x_continuous(breaks=0:20)
+
+
+
+
+```
+
+
+
+```{r}
+
+a <- replicate(10000, sum(rnorm(5, 0, 1)^2))
+hist(a)
+
+```
+
+
+```{r}
+mean(rnorm(10000, 0, 1))
+```
+
+
+```{r}
+mean(rnorm(10000, 0, 1)^2)
+```
+
+```{r}
+mean(rchisq(10000, 5))
+```
+
+
+```{r}
+hist(rbinom(10000, 10,.5), breaks = seq(0,10,1))
+```
+
+```{r}
+hist(rbinom(10000, 100,.5), breaks = seq(20,80,1))
+```
+
+
+
+
+```{r}
+
+pbinom(2, 10,.5, lower.tail=TRUE)*2
+
+```
+
+```{r}
+
+chisq.test(c(2, 8))
+
+```
+
+
+
+```{r}
+
+pbinom(40, 100,.5, lower.tail=TRUE)*2
+
+chisq.test(c(40, 60))
+
+```
+
+```{r}
+
+pbinom(450, 1000,.5, lower.tail=TRUE)*2
+
+chisq.test(c(450, 550))
+
+```
+
+```{r}
+
+pbinom(4500, 10000,.5, lower.tail=TRUE)*2
+
+chisq.test(c(4500, 5500))
+
+```
+
+
+### Problems
+
+## Problem 1
+
+1. The following paper links to open data, and describes a design where two chi-square tests are performed for Experiment 1 (A copy of this paper will be made available).
+
+Silver, A. M., Stahl, A. E., Loiotile, R., Smith-Flores, A. S., & Feigenson, L. (2020). When Not Choosing Leads to Not Liking: Choice-Induced Preference in Infancy. Psychological Science, 0956797620954491.
+
+Obtain the data from the online repository, show your code for loading it into R, then conduct the same tests reported in Experiment 1 that the authors conducted. These include one binomial test, and two chi-square tests. Briefly report your re-analysis, and discuss whether you obtained the same values as the authors did (6 points).
+
+```{r}
+
+the_data <- read.csv(file="Lab9/Infant_Data.csv")
+
+library(dplyr)
+
+e1_data <- the_data %>%
+  filter(ExperimentNumber == "1")
+
+sum_C <- sum(e1_data$Infant.Chose.C)
+total_C <- length(e1_data$Infant.Chose.C)
+
+(binomial_p <- pbinom(q=total_C - sum_C,
+                      size=total_C, 
+                      prob = 0.5,
+                      lower.tail=TRUE)*2)
+
+library(tidyr)
+
+gender_choice_table <- e1_data %>%
+  group_by(Gender, Infant.Chose.C) %>%
+  summarize(counts = n()) %>%
+  pivot_wider(names_from = c(Gender),
+              values_from = counts)
+
+gender_choice_table <- gender_choice_table[,2:3]
+
+(gender_Xsq <- chisq.test(gender_choice_table))
+
+uncorrected_Xsq <-
+  sum((gender_Xsq$observed - gender_Xsq$expected)^2/gender_Xsq$expected)
+
+gender_Xsq_unc <- pchisq(uncorrected_Xsq, 1, lower.tail = FALSE)
+
+age_table <- e1_data %>%
+  group_by(AgeMonths, Infant.Chose.C) %>%
+  summarize(counts = n()) %>%
+  pivot_wider(names_from = c(AgeMonths),
+              values_from = counts)
+
+age_table[is.na(age_table)] <- 0
+age_table <- as.matrix(age_table[,2:21])
+(age_xs <- chisq.test(age_table))
+
+age_xs$observed
+age_xs$expected
+
+```
+
+
+` Confidence level - 10. ` 
+
+
+## Original text from the authors results
+
+However, in the critical test trial that followed, 16 of 21 infants (76.2%) chose the new block (block C; Fig. 1)—a percentage significantly different from chance, according to a two-tailed binomial test, p = .026, 95% exact confidence interval (CI) = [52.83%, 91.78%], relative risk ratio = 1.52. A chi-square test of independence indicated no significant effect of age or gender on infants’ choices, $\chi^2$ (19, N=21)=18.24,p=.506,and $\chi^2$ (1,N=21)=0.15,p= .696, respectively.
+
+
+## Reproductible report using above re-analysis
+
+However, in the critical test trial that followed, `r sum_C` of `r total_C` infants ( `r sum_C/total_C` %) chose the new block (block C; Fig. 1)—a percentage significantly different from chance, according to a two-tailed binomial test, p = `r round(binomial_p, digits=3)`, 95% exact confidence interval (CI) = [52.83%, 91.78%], relative risk ratio = 1.52. A chi-square test of independence indicated no significant effect of age or gender on infants’ choices, $\chi^2$ (`r age_xs$parameter`, N=`r sum(age_xs$observed)`)=`r round(age_xs$statistic, digits=3)` , p=`r round(age_xs$p.value, digits=3)`,and $\chi^2$ (1,N=21)=`r round(uncorrected_Xsq, digits=3)`,p=`r round(gender_Xsq_unc, digits=3)`, respectively.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
