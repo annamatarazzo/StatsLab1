@@ -109,6 +109,36 @@ ggplot(overall_means, aes(x=Posture,
 
 
 
+```{r}
+
+## From the lab
+## I left it here because if I remove it my effect sizes do not work
+
+effect_sizes <- seq(0,1.5,.1)
+prop_significant <-c()
+
+for(i in 1:length(effect_sizes)){
+  sim_ps <- replicate(1000, t.test(replicate(10, mean(rnorm(5, 0, 1))),
+                                   replicate(10, mean(rnorm(5, effect_sizes[i], 1))),
+                                   var.equal = TRUE)$p.value)
+
+  prop_significant[i] <- length(sim_ps[sim_ps < .05])/1000
+}
+
+plot_df <- data.frame(effect_sizes,
+                      prop_significant)
+
+ggplot(plot_df, aes(x=effect_sizes,y=prop_significant))+
+  geom_line() +
+  geom_point() +
+  scale_x_continuous(breaks=seq(0,1.5,.1))+
+  scale_y_continuous(breaks=seq(0,1,.1)) +
+  ylab("Proportion Significant")
+
+
+
+```
+
 
 
 
