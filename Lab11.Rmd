@@ -10,227 +10,122 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r}
-A <- c(1,2,3,4,5,6,7,8,9,10)
-B <- c (1,3,2,4,3,5,4,5,6,7)
+### Problems
 
-plot(A, B)
-cor(A,B)
-```
+## Problem 1
 
-```{r}
-A <- matrix(rnorm(100,0,1), ncol=10, nrow=10)
-B <- c(1,3,2,4,3,5,4,5,6,7)
-cor(A,B)
-```
+X <- c(1,4,3,2,5,4,3,6,7,8)
 
-```{r}
-A <- matrix(rnorm(25,0,1), ncol=5, nrow=5)
-B <- matrix(rnorm(25,0,1), ncol=5, nrow=5)
-cor(A,B)
-```
+Y <- c(1,3,6,7,8,2,8,7,6,9)
+
+1. An X and Y variable contain the above numbers.
+
+A. Compute Pearson’s 𝑟and report the associated p-value using the cor.test() function. (2 points)
+
 
 ```{r}
-A <- c(1,2,3,4,5)
-B <- c(5,2,3,1,4)
-cor(A,B)
 
-A_z <- (A-mean(A))/sd(A)
-B_z <- (B-mean(B))/sd(B)
-sum(A_z*B_z)/4     #n-1
+library(papaja)
 
-
-
-sd_pop <- function(x){
-  sqrt(sum(x-mean(x))^2/length(x))
-}
-
-A_z <- (A-mean(A))/sd_pop(A)
-B_z <- (B-mean(B))/sd_pop(B)
-c <- sum(A_z*B_z)/5
-c
-#????
-```
-
-```{r}
-A <- c(1,2,3,4,5)
-B <- c(5,2,3,1,NA)
-cor(A,B)
-
-cor(A,B, use="complete.obs")
-```
-
-```{r}
-A <- c(1,2,3,4,5)
-B <- c(5,2,3,1,4)
-cor.test(A,B)
-```
-
-```{r}
-A <- c(1,2,3,4,5)
-B <- c(5,2,3,1,4)
-results <- cor.test(A,B)
-
-results$statistic  #t-value
-results$parameter  #df
-results$p.value
-results$estimate   #r
-```
-
-```{r}
-X <- 1:10
-Y <- 1:10
-
-plot(X,Y)
-
-c <- cor(X,Y)
-c
-```
-
-```{r}
-X <- 1:10
-Y <- 10:1
+X <- c(1,4,3,2,5,4,3,6,7,8)
+Y <- c(1,3,6,7,8,2,8,7,6,9)
 
 plot(X,Y)
 
 cor(X,Y)
-```
 
-```{r}
-X <- 1:10
-Y <- sample(10:1)
+cor.test(X,Y)
+cor.test(X,Y)$estimate
 
-plot(X,Y)
-
-cor(X,Y)
-```
-
-```{r}
-X <- 1:10
-Y <- 1:10
-X*Y
-sum(X*Y)
-```
-
-```{r}
-X <- 1:10
-Y <- 10:1
-X*Y
-sum(X*Y)
-```
-
-```{r}
-sum(sample(1:10)*sample(1:10))
-```
-
-```{r}
-sim_sums <- replicate(1000,sum(sample(1:10)*sample(1:10)))
-hist(sim_sums)
-
-min(sim_sums)
-max(sim_sums)
 
 ```
 
-```{r}
-X <- rnorm(10,0,1)
-Y <- rnorm(10,0,1)
-cor(X,Y)
-```
-
-```{r}
-replicate(10,cor(rnorm(10,0,1),rnorm(10,0,1)))
-```
-
-```{r}
-rand_1000 <- replicate(1000,cor(rnorm(10,0,1),rnorm(10,0,1)))
-hist(rand_1000)
-```
-
-```{r}
-mean(rand_1000)
-max(rand_1000)
-min(rand_1000)
-
-length(rand_1000[rand_1000 >.55])/10000
-```
-
-```{r}
-rand_1000 <- replicate(1000,cor(rnorm(100,0,1),rnorm(100,0,1)))
-hist(rand_1000)
-
-mean(rand_1000)
-max(rand_1000)
-min(rand_1000)
-
-length(rand_1000[rand_1000 >.55])/10000
-```
-
-```{r}
-library(ggplot2)
-library(ggrepel)
-
-Words = c('bag', 'buckle', 'on', 'insane', 'by', 'monastery', 'relief', 'slope','scoubdrel','loss','holiday','pretentious','solid','time','gut','tarantula','generality','arise','blot','infectious')
-
-Length=c(3,6,2,6,2,9,6,5,9,4,7,11,5,4,3,9,10,5,4,10)
-Meanings=c(8,4,10,1,11,1,4,3,1,6,2,1,9,3,4,1,3,3,3,2)
-
-all <- data.frame(Words,Length,Meanings)
-knitr::kable(all)
-
-```
-
-```{r}
-ggplot(all,aes(x=Length, y=Meanings))+
-  geom_point()+
-  geom_text_repel(aes(label=Words))
-```
-
-```{r}
-
-```
+#### The correlation between X and Y is `r round(cor.test(X,Y)$estimate, digits=3)`, the associated p-value is `r round(cor.test(X,Y)$p.value, digits=3)`.
 
 
 
-
-
-
+B. Use a permutation test to create a null-distribution, and report the p-value for getting the observed correlation or larger using your simulated null-distribution. (2 points)
 
 
 ```{r}
 
+X <- c(1,4,3,2,5,4,3,6,7,8)
+Y <- c(1,3,6,7,8,2,8,7,6,9)
+
+sim_rs <- replicate(10000,cor(sample(X), sample(Y)))
+hist(sim_rs)
+
+p_value <- length(sim_rs[sim_rs >= 0.509])/10000
+
+
 ```
+
+#### The p-value for getting the observed correlation or larger is `r round(p_value, digits=3)`.
+
+
+## Problem 2
+
+
+2. Using the variables X and Y above, and assuming that the values could be re-ordered in any way, report the following:
+
+A. the smallest possible sum of cross-products (1 point)
+
+B. the largest possible sum of cross-products (1 point)
+
+` I am confused about which formula to use for the sum of cross products, because in one textbook the mean is substracted and in the other one it is not. I've noticed that in R "crossprod" function does not substracts means. So I wrote two versions just in case.`
+
+### Version 1:
 
 ```{r}
 
+X <- c(1,4,3,2,5,4,3,6,7,8)
+Y <- c(1,3,6,7,8,2,8,7,6,9)
+
+crossprod(X,Y)
+
+cross = 1*1+4*3+3*6+2*7+5*8+4*2+3*8+6*7+7*6+8*9    
+cross
+
+sim_cp <- replicate(10000,crossprod(sample(X), sample(Y)))
+hist(sim_cp)
+
+min(sim_cp)
+
+max(sim_cp)
+
 ```
+
+
+#### The smallest possible sum of crossproducts in my simulation is `r min(sim_cp)`, the largest possible sum of crossproducts is `r max(sim_cp)`.
+
+
+
+### Version 2:
+
 
 ```{r}
 
+X <- c(1,4,3,2,5,4,3,6,7,8)
+Y <- c(1,3,6,7,8,2,8,7,6,9)
+
+X_no_mean <- c(X-mean(X))
+Y_no_mean <- c(Y-mean(Y))
+
+crossprod(X_no_mean,Y_no_mean)
+
+sim_cp_no_mean <- replicate(10000,crossprod(sample(X_no_mean), sample(Y_no_mean)))
+hist(sim_cp_no_mean)
+
+min(sim_cp_no_mean)
+
+max(sim_cp_no_mean)
+
 ```
 
-```{r}
-
-```
-
-```{r}
-
-```
-
-```{r}
-
-```
-
-```{r}
-
-```
 
 
 
-
-
-
-
+#### The smallest possible sum of crossproducts in my simulation is `r min(sim_cp_no_mean)`, the largest possible sum of crossproducts is `r max(sim_cp_no_mean)`.
 
 
 
