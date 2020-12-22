@@ -1,0 +1,255 @@
+---
+title: "Project"
+author: "Anna Matarazzo"
+date: "12/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This report re-produces the analysis reported in Carstensen L., Shavit Y., Barnes J. (2020). The citation for the article is:
+
+Carstensen L., Shavit Y., Barnes J. (2020). Age Advantages in Emotional Experience Persist Even Under Threat From the COVID-19 Pandemic, Psychological science, 31(11), 1374-1385.
+
+The data were downloaded from [https://osf.io/h7uqv/] (https://osf.io/h7uqv/)
+
+Carstensen et al. (2020) had surveyed 945 participants and assessed the frequency and intensity of their positive and negative emotions. Age was associated with greater emotional well-being. 
+
+
+## Re-analysis
+
+```{r}
+
+library(papaja)
+library(dplyr)
+library(ggplot2)
+library(data.table)
+
+
+all_data <- as.data.frame(fread(file="Project/AgeAdvantagesEmotionCovid_Data.csv", header=TRUE))
+
+
+## Positive Emotions Means
+
+# So I had to do this below mess, because data contained NA in some cells I could not figure out how to put everything in one table, because the number of rows was different when you omit NA cells.
+
+
+f_calm <- c(as.numeric(unlist(all_data[,7])))
+f_calm2 <- na.omit(f_calm)
+Calm <- c(mean(f_calm2), sd(f_calm2))
+
+f_qui <- c(as.numeric(unlist(all_data[,11])))
+f_qui2 <- na.omit(f_qui)
+Quiet <- c(mean(f_qui2), sd(f_qui2))
+
+f_app <- c(as.numeric(unlist(all_data[,8])))
+f_app2 <- na.omit(f_app)
+Appreciative <- c(mean(f_app2), sd(f_app2))
+
+f_int <- c(as.numeric(unlist(all_data[,6])))
+f_int2 <- na.omit(f_int)
+Int <- c(mean(f_int2), sd(f_int2))
+
+f_cont <- c(as.numeric(unlist(all_data[,9])))
+f_cont2 <- na.omit(f_cont)
+Cont <- c(mean(f_cont2), sd(f_cont2))
+
+f_happ <- c(as.numeric(unlist(all_data[,22])))
+f_happ2 <- na.omit(f_happ)
+Happ <- c(mean(f_happ2), sd(f_happ2))
+
+f_rela <- c(as.numeric(unlist(all_data[,16])))
+f_rela2 <- na.omit(f_rela)
+Rela <- c(mean(f_rela2), sd(f_rela2))
+
+f_pea <- c(as.numeric(unlist(all_data[,18])))
+f_pea2 <- na.omit(f_pea)
+Pea <- c(mean(f_pea2), sd(f_pea2))
+
+f_ener <- c(as.numeric(unlist(all_data[,3])))
+f_ener2 <- na.omit(f_ener)
+Ener <- c(mean(f_ener2), sd(f_ener2))
+
+f_aff <- c(as.numeric(unlist(all_data[,2])))
+f_aff2 <- na.omit(f_aff)
+Aff <- c(mean(f_aff2), sd(f_aff2))
+
+f_amu <- c(as.numeric(unlist(all_data[,24])))
+f_amu2 <- na.omit(f_amu)
+Amu <- c(mean(f_amu2), sd(f_amu2))
+
+f_acc <- c(as.numeric(unlist(all_data[,4])))
+f_acc2 <- na.omit(f_acc)
+Acc <- c(mean(f_acc2), sd(f_acc2))
+
+f_joy <- c(as.numeric(unlist(all_data[,25])))
+f_joy2 <- na.omit(f_joy)
+Joy <- c(mean(f_joy2), sd(f_joy2))
+
+f_pro <- c(as.numeric(unlist(all_data[,23])))
+f_pro2 <- na.omit(f_pro)
+Pro <- c(mean(f_pro2), sd(f_pro2))
+
+f_reli <- c(as.numeric(unlist(all_data[,20])))
+f_reli2 <- na.omit(f_reli)
+Reli <- c(mean(f_reli2), sd(f_reli2))
+
+f_exc <- c(as.numeric(unlist(all_data[,28])))
+f_exc2 <- na.omit(f_exc)
+Exc <- c(mean(f_exc2), sd(f_exc2))
+
+Means_Positive <- data.frame(Calm, Quiet, Appreciative, Int, Cont, Happ, Rela, Pea, Ener, Aff, Amu, Acc, Joy, Pro, Reli, Exc)
+
+  t_Means <- transpose(Means_Positive)
+  rownames(t_Means) <- c("Calm", "Quiet", "Appreciative", "Interested", "Content", "Happy", "Relaxed", "Peaceful", "Energetic", "Affectionate", "Amused", "Accomplished", "Joyful", "Proud", "Relieved", "Excited")
+  names(t_Means)[1] <- "Mean"
+  names(t_Means)[2] <- "St.Dev"
+
+knitr::kable(round(t_Means, digits=2))
+
+```
+
+
+```{r}
+
+## Negative Emotions Means
+
+f_conc <- c(as.numeric(unlist(all_data[,29])))
+f_conc2 <- na.omit(f_conc)
+Conc <- c(mean(f_conc2), sd(f_conc2))
+
+f_anx <- c(as.numeric(unlist(all_data[,15])))
+f_anx2 <- na.omit(f_anx)
+Anx <- c(mean(f_anx2), sd(f_anx2))
+
+f_bor <- c(as.numeric(unlist(all_data[,14])))
+f_bor2 <- na.omit(f_bor)
+Bor <- c(mean(f_bor2), sd(f_bor2))
+
+f_fru <- c(as.numeric(unlist(all_data[,27])))
+f_fru2 <- na.omit(f_fru)
+Fru <- c(mean(f_fru2), sd(f_fru2))
+
+f_irr <- c(as.numeric(unlist(all_data[,26])))
+f_irr2 <- na.omit(f_irr)
+Irr <- c(mean(f_irr2), sd(f_irr2))
+
+f_sad <- c(as.numeric(unlist(all_data[,12])))
+f_sad2 <- na.omit(f_sad)
+Sad <- c(mean(f_sad2), sd(f_sad2))
+
+f_lon <- c(as.numeric(unlist(all_data[,30])))
+f_lon2 <- na.omit(f_lon)
+Lon <- c(mean(f_lon2), sd(f_lon2))
+
+f_fear <- c(as.numeric(unlist(all_data[,17])))
+f_fear2 <- na.omit(f_fear)
+Fear <- c(mean(f_fear2), sd(f_fear2))
+
+f_ang <- c(as.numeric(unlist(all_data[,5])))
+f_ang2 <- na.omit(f_ang)
+Ang <- c(mean(f_ang2), sd(f_ang2))
+
+f_dis <- c(as.numeric(unlist(all_data[,10])))
+f_dis2 <- na.omit(f_dis)
+Dis <- c(mean(f_dis2), sd(f_dis2))
+
+f_gui <- c(as.numeric(unlist(all_data[,21])))
+f_gui2 <- na.omit(f_gui)
+Gui <- c(mean(f_gui2), sd(f_gui2))
+
+f_emb <- c(as.numeric(unlist(all_data[,13])))
+f_emb2 <- na.omit(f_emb)
+Emb <- c(mean(f_emb2), sd(f_emb2))
+
+f_sha <- c(as.numeric(unlist(all_data[,19])))
+f_sha2 <- na.omit(f_sha)
+Sha <- c(mean(f_sha2), sd(f_sha2))
+
+
+Means_Negative <- data.frame(Conc, Anx, Bor,  Fru, Irr, Sad, Lon, Fear, Ang, Dis, Gui, Emb, Sha)
+
+  t_Means_Neg <- transpose(Means_Negative)
+  rownames(t_Means_Neg) <- c("Concerned", "Anxious/worried", "Bored", "Frustrated", "Irritated", "Sad", "Lonely", "Fearful", "Angry", "Disgusted", "Guilty", "Embarrassed", "Ashamed")
+  names(t_Means_Neg)[1] <- "Mean"
+  names(t_Means_Neg)[2] <- "St.Dev"
+
+knitr::kable(round(t_Means_Neg, digits=2))
+
+```
+
+
+## T-test, Means, SD
+
+```{r}
+
+Rate_Neg <- c(as.numeric(unlist(Means_Negative[1,])))
+Rate_Pos <- c(as.numeric(unlist(Means_Positive[1,])))
+
+Emotions_rate <- data.frame(mean(Rate_Neg),sd(Rate_Neg), mean(Rate_Pos), sd(Rate_Pos))
+
+
+t.test(Rate_Pos, Rate_Neg, var.equal=TRUE)
+
+knitr::kable(Emotions_rate)
+
+```
+## Emotions - Age Correlation
+
+```{r}
+
+Correlation_Age_Pos <- data.frame(all_data[,104],all_data[,84])
+Correlation_Age_PosN <- cor(all_data[,104],all_data[,84])
+
+Correlation_Age_Neg <- data.frame(all_data[,105],all_data[,84])
+Correlation_Age_NegN <- cor(all_data[,105],all_data[,84])
+
+```
+
+## Positive Emotions - Age Correlation Plot
+
+```{r}
+	plot_pos <- plot(all_data[,104]~all_data[,84],data=Correlation_Age_Pos, main = "CORRELATION AGE AND POSITIVE EMOTIONS", xlab = "AGE", ylab = "EMOTION RATE")+ 
+	  abline(lm(all_data[,104]~all_data[,84]), col="BLUE")
+```
+
+## Negative Emotions - Age Correlation Plot
+
+```{r}	
+	plot_neg <- plot(all_data[,105]~all_data[,84],data=Correlation_Age_Pos, main = "CORRELATION AGE AND NEGATIVE EMOTIONS", xlab = "AGE", ylab = "EMOTION RATE")+ 
+	  abline(lm(all_data[,105]~all_data[,84]), col="BLUE")
+
+```
+
+
+
+### Results
+ 
+## Original text:
+
+As a whole, participants reported positive emotions
+(M = 1.97, SD = 0.56) more frequently than negative
+emotions (M = 1.42, SD = 0.66), t(944) = 15.41, p < .001,
+d = 0.53, 95% confidence interval (CI) for the mean dif-
+ference = [0.48, 0.63]. 
+
+## My results:
+
+As a whole, participants reported positive emotions
+(M = `r mean(Rate_Pos)`, SD = `r sd(Rate_Pos)`) more frequently than negative
+emotions (M =  `r mean(Rate_Neg)`, SD = `r sd(Rate_Neg)`), t(27) = 3.375, p = .002,
+95% confidence interval (CI) for the mean difference = [0.22, 0.92]. 
+
+
+
+## Discussion
+
+The re-analysis partly reproduced the analysis reported by Carstensen L., Shavit Y., Barnes J. (2020). Table 1 - Mean Frequencies of Emotions and correlation of age and emotions (Table 2, Line 1 and Figure 1) were reproduced successfully. One issue with this reproducible analysis document was that the data contained NA variables, which made it impossible for me to put the data in one table, which is probably why the t-tests results do not match. 
+
+
+
+
